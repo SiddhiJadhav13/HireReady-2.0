@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import {
   Box, Flex, VStack, HStack, Text, Heading, Button, Spinner,
   Badge, Icon, IconButton,
@@ -23,6 +23,8 @@ import QuizPage from './pages/QuizPage';
 import StudentJobs from './pages/StudentJobs';
 import ResumeAnalysisPage from './pages/ResumeAnalysisPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+
+const SkillGapPage = React.lazy(() => import('./pages/SkillGapPage'));
 
 const API_BASE = '/api';
 
@@ -535,14 +537,16 @@ export default function App() {
 
           {/* Roadmap Tab */}
           {activeTab === 'roadmap' && (
-            <Flex direction="column" align="center" justify="center" h="300px" gap={4}>
-              <Icon asChild w={12} h={12} color="blue.400"><Map /></Icon>
-              <Heading size="md" color="gray.200">Career Roadmap</Heading>
-              <Text color="gray.400" textAlign="center" maxW="400px">
-                Personalized career roadmap coming soon! Complete your profile and analysis to get started.
-              </Text>
-            </Flex>
+            <Suspense fallback={
+              <Flex direction="column" align="center" justify="center" h="300px" gap={3}>
+                <Spinner size="xl" color="blue.400" />
+                <Text color="gray.400">Loading Skill Gap Analyzer…</Text>
+              </Flex>
+            }>
+              <SkillGapPage />
+            </Suspense>
           )}
+
 
           {/* Profile Tab */}
           {activeTab === 'profile' && (
