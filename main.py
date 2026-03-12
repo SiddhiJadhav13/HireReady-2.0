@@ -11,6 +11,8 @@ import io
 import logging
 
 import json
+import os
+from groq import Groq
 from PyPDF2 import PdfReader
 from sqlalchemy.orm.session import Session
 from typing import Optional, List
@@ -37,6 +39,24 @@ Base.metadata.create_all(bind=engine)
 # ── Load ML model & columns ──────────────────────────────────────────────────
 model = joblib.load("readiness_model.pkl")
 feature_columns = joblib.load("feature_columns.pkl")
+
+# Roadmap Prediction Models
+roadmap_model = joblib.load("roadmap_model.pkl")
+roadmap_mlb = joblib.load("roadmap_mlb.pkl")
+roadmap_vectorizer = joblib.load("roadmap_vectorizer.pkl")
+
+# Precompute/Cache Skills for Roadmap
+ROLE_SKILLS_CACHE = {}
+try:
+    df_roles = pd.read_csv("technical_roles_and_skills.csv")
+    for _, row in df_roles.iterrows():
+        # Map normalized role name to list of skills
+        role_name = str(row["Role"]).strip().lower()
+        skills_list = [s.strip() for s in str(row["Key Skills"]).split(";") if s.strip()]
+        ROLE_SKILLS_CACHE[role_name] = skills_list
+    logger.info(f"Loaded {len(ROLE_SKILLS_CACHE)} roles into skill cache.")
+except Exception as e:
+    logger.error(f"Failed to load technical_roles_and_skills.csv: {e}")
 
 app = FastAPI()
 
@@ -687,6 +707,107 @@ def extract_features(data: FeatureExtractionRequest):
         leetcode_username=data.leetcode_username,
     )
     return {"features": feature_vector}
+
+
+class SkillPredictionRequest(BaseModel):
+    role: str
+
+
+@app.post("/api/predict-skills")
+def predict_skills(data: SkillPredictionRequest):
+    """
+    Phase 1: Predict core tech skills for a job title.
+    Returns an array of strings (Skill Bubbles).
+    """
+    role = data.role.strip()
+    if not role:
+        raise HTTPException(status_code=400, detail="Role name is required")
+    
+    # 1. Check Cache First (Instant)
+    normalized_role = role.lower()
+    if normalized_role in ROLE_SKILLS_CACHE:
+        return {
+            "role": role,
+            "skills": sorted(ROLE_SKILLS_CACHE[normalized_role]),
+            "source": "cache"
+        }
+    
+    # 2. Fallback to ML Model (Predictive)
+    try:
+        v = roadmap_vectorizer.transform([role])
+        p = roadmap_model.predict(v)
+        skills = roadmap_mlb.inverse_transform(p)[0] # Extract first result
+        
+        return {
+            "role": role,
+            "skills": sorted(list(skills)),
+            "source": "ml_model"
+        }
+    except Exception as e:
+        logger.error(f"ML Prediction error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to predict skills")
+
+
+class LearningPathRequest(BaseModel):
+    skill: str
+
+
+@app.post("/api/generate-learning-path")
+def generate_learning_path(data: LearningPathRequest):
+    """
+    Phase 2: Generate a step-by-step learning path using Groq AI.
+    Returns nodes and edges for React Flow.
+    """
+    skill = data.skill.strip()
+    if not skill:
+        raise HTTPException(status_code=400, detail="Skill name is required")
+
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured")
+
+    client = Groq(api_key=api_key)
+
+    system_prompt = (
+        "You are a professional curriculum designer. Generate a learning roadmap for the given skill. "
+        "Return a STRICT JSON object with these keys:\n"
+        "1. 'nodes': array of 6-8 objects with 'id' (like 'n1','n2') and 'label' (short, max 4 words).\n"
+        "2. 'edges': array with 'id', 'source', 'target'.\n"
+        "3. 'courses': array of 4 objects with:\n"
+        "   - 'title': exact course name\n"
+        "   - 'platform': Udemy/Coursera/freeCodeCamp\n"
+        "   - 'url': the DIRECT link to the course page (e.g. 'https://www.coursera.org/learn/html-css-javascript-for-web-developers' or 'https://www.udemy.com/course/the-web-developer-bootcamp/'). Must be a real, working URL.\n"
+        "   - 'level': Beginner/Intermediate/Advanced\n"
+        "   - 'description': 1 short sentence\n"
+        "4. 'certificates': array of 3 objects with:\n"
+        "   - 'title': exact certification name\n"
+        "   - 'provider': Google/AWS/Meta/Microsoft/IBM\n"
+        "   - 'url': direct link to the certification page (e.g. 'https://grow.google/certificates/it-support/')\n"
+        "   - 'description': 1 short sentence\n"
+        "5. 'youtube': array of 4 objects with:\n"
+        "   - 'title': exact video title\n"
+        "   - 'channel': real channel name (Traversy Media, freeCodeCamp, Fireship, etc.)\n"
+        "   - 'videoId': the real 11-character YouTube video ID (e.g. 'hdI2bqOjy3c'). This MUST be a real video ID from YouTube.\n"
+        "   - 'description': 1 short sentence\n"
+        "CRITICAL: All URLs and videoIds MUST be real and working. Use only well-known, popular resources. "
+        "Do not include any text outside the JSON object."
+    )
+
+    try:
+        completion = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Generate a roadmap for: {skill}"}
+            ],
+            response_format={"type": "json_object"}
+        )
+        
+        roadmap_data = json.loads(completion.choices[0].message.content)
+        return roadmap_data
+    except Exception as e:
+        logger.error(f"Groq API error: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate roadmap")
 
 
 @app.post("/api/analyze-full-profile")

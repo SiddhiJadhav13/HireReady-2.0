@@ -1,0 +1,101 @@
+Role,Key Skills
+Software Engineer,Data Structures; Algorithms; OOP; Git; Debugging; System Design
+Frontend Developer,HTML; CSS; JavaScript; React; Responsive Design; Web Performance
+Backend Developer,Java/Python/Node.js; APIs; Databases; Authentication; Microservices
+Full Stack Developer,Frontend Frameworks; Backend Development; REST APIs; Databases; Git
+Data Scientist,Python; Statistics; Machine Learning; Pandas; Data Visualization
+Machine Learning Engineer,Python; TensorFlow/PyTorch; Feature Engineering; Model Deployment
+AI Engineer,Deep Learning; NLP; Computer Vision; Model Optimization; Python
+DevOps Engineer,CI/CD; Docker; Kubernetes; AWS/Azure; Monitoring; Linux
+Cloud Engineer,AWS/Azure/GCP; Networking; Security; Infrastructure as Code
+Cloud Architect,Cloud Governance; Cost Optimization; Scalability; Multi-cloud Strategy
+Cybersecurity Analyst,Network Security; Penetration Testing; SIEM; Incident Response
+Security Engineer,Cryptography; IAM; Cloud Security; Threat Modeling; Vulnerability Assessment
+Mobile App Developer,Java/Kotlin/Swift; Android/iOS SDK; REST APIs; UI/UX
+Android Developer,Java/Kotlin; Android Studio; XML UI; Firebase; API Integration
+iOS Developer,Swift; Xcode; UIKit; REST APIs; App Store Deployment
+React Native Developer,JavaScript; React Native; Redux; Mobile Performance; Cross-platform APIs
+Flutter Developer,Dart; Flutter SDK; State Management; UI Design; API Integration
+Database Administrator,SQL; Database Optimization; Backup & Recovery; Security
+Data Engineer,ETL; SQL; Python; Spark; Data Pipelines; Data Warehousing
+Big Data Engineer,Hadoop; Spark; NoSQL; Distributed Computing; Kafka
+Business Intelligence Analyst,SQL; Power BI/Tableau; Data Modeling; Reporting
+QA Engineer,Test Cases; Manual Testing; Automation Testing; Selenium; Bug Tracking
+Automation Test Engineer,Selenium; TestNG/JUnit; CI/CD Integration; Scripting
+SDET,Test Automation Frameworks; Performance Testing; API Testing; Unit Testing; Java/Python
+Site Reliability Engineer,Monitoring; Incident Management; Kubernetes; Automation; Infrastructure
+Platform Engineer,Internal Developer Platforms; Infrastructure as Code; Terraform; Helm; Cloud
+Game Developer,Unity/Unreal; C# or C++; Game Physics; Graphics Programming
+AR/VR Developer,Unity; 3D Modeling; C#; Spatial Computing
+Game Designer,Mechanics Design; Level Design; Storyboarding; Prototyping; User Experience
+Embedded Systems Engineer,C/C++; Microcontrollers; RTOS; Hardware Interfaces
+Firmware Engineer,Low-level C; Assembly; Device Drivers; RTOS; Debugging
+Blockchain Developer,Solidity; Smart Contracts; Ethereum; Web3; Cryptography
+Smart Contract Auditor,Security Auditing; Solidity; Blockchain Architecture; Formal Verification
+Network Engineer,Routing; Switching; TCP/IP; Firewalls; Network Monitoring
+Network Architect,SDN; Network Design; Security Protocols; BGP/OSPF; MPLS
+Systems Administrator,Linux/Windows Admin; Scripting; Networking; Security
+Linux Administrator,Bash Scripting; Kernel Configuration; Server Monitoring; Security Hardening
+Product Manager (Tech),Product Strategy; Agile; User Stories; Data Analysis
+Technical Product Manager,System Architecture; Roadmap Planning; Stakeholder Management; Tech Knowledge
+UI/UX Designer,Wireframing; Figma; User Research; Prototyping; Design Systems
+UX Researcher,User Interviews; Card Sorting; Usability Testing; Data Synthesis
+Technical Support Engineer,Troubleshooting; Networking Basics; Customer Support; Documentation
+Customer Success Engineer,Client Onboarding; Technical Advisory; Problem Solving; Relationship Management
+Solutions Architect,System Architecture; Cloud Platforms; Scalability; Security
+Pre-sales Engineer,Product Demos; Technical Requirements; Solution Design; Communication
+AI Prompt Engineer,Prompt Design; LLM Behavior; Testing; AI Safety; Documentation
+NLP Engineer,Text Processing; Transformers; Sentiment Analysis; Semantic Search; Python
+Computer Vision Engineer,OpenCV; Image Processing; Object Detection; CNNs; PyTorch
+Robotics Engineer,ROS; C++; Kinematics; Control Systems; Sensor Fusion
+Data Analyst,SQL; Excel; Statistics; Data Cleaning; Visualization
+Marketing Analyst,Google Analytics; SEM/SEO; Data Mining; Customer Segmentation
+Financial Analyst,Financial Modeling; SQL; Reporting; Forecasting
+Quantitative Analyst,Stochastic Calculus; Python/R; Risk Management; Algorithm Trading
+SOC Analyst,Log Analysis; Incident Response; Threat Hunting; SIEM
+Penetration Tester,Ethical Hacking; Nmap; Metasploit; Web Security; Burp Suite
+Vulnerability Researcher,Reverse Engineering; Binary Exploitation; Fuzzing; C/C++
+Cloud Security Specialist,AWS Security; CloudTrail; GuardDuty; Compliance; IAM
+API Developer,REST; GraphQL; Swagger; Node.js/Go; API Security
+Golang Developer,Go; Microservices; Concurrency; gRPC; Docker
+Rust Developer,Rust; Memory Safety; Systems Programming; WebAssembly; Performance
+Python Developer,Python; Django/Flask; Data Analysis; Automation; Scripting
+Java Developer,Java 11+; Spring Boot; Maven/Gradle; Microservices; Hibernate
+SAP Consultant,SAP Modules (ABAP/FI/CO); Business Processes; Integration; Customization
+Salesforce Developer,Apex; Lightning Components; Salesforce Admin; SOQL/SOSL
+Microsoft Dynamics Consultant,Dynamics 365; Power Platform; Customization; Integration
+RPA Developer,UiPath; Blue Prism; Process Mapping; Automation; .NET
+Integration Engineer,Mulesoft/Dell Boomi; Middleware; Web Services; Messaging Queues
+WordPress Developer,PHP; HTML/CSS; WordPress Hooks; Plugin Development; SEO
+Shopify Developer,Liquid; Theme Customization; App Development; E-commerce Basics
+CMS Developer,Headless CMS (Strapi/Contentful); Frontend Integration; Content Modeling
+Technical Writer,API Documentation; Markdown; Technical Diagrams; User Manuals
+Content Engineer,Metadata Management; CMS Architecture; Search Optimization
+Search Engine Optimization (SEO) Specialist,Keywords; Technical SEO; Google Search Console; Analytics
+Site Search Engineer,Elasticsearch; Solr; Lucene; Relevance Tuning; indexing
+Graphics Engineer,OpenGL; Vulkan; DirectX; Shaders; Mathematical Modeling
+Multimedia Developer,Video Encoding (FFmpeg); Audio Processing; HLS/DASH; WebRTC
+GIS Developer,ArcGIS; Leaflet; Spatial Data; Python; Geometry Algorithms
+Bioinformatician,Genomics; Python/R; Sequence Analysis; Biostatistics; Molecular Biology
+Health Informatics Specialist,EHR Systems; HL7/FHIR; Data Privacy; Medical Terminologies
+ERP Implementation Specialist,SQL; Business Analysis; Project Management; ERP Configuration
+Supply Chain Analyst,Logistics Planning; Inventory Management; Optimization; Data Analysis
+E-learning Developer,SCORM/xAPI; Articulate Storyline; LMS Admin; Instructional Design
+EdTech Engineer,Educational Gamification; Adaptive Learning; Interactive Content
+Performance Engineer,LoadRunner; JMeter; Profiling Tools; Capacity Planning
+Site Architect,Infrastructure Design; Multi-region Setup; Disaster Recovery; High Availability
+Release Manager,Release Orchestration; Version Control; Change Management; Communication
+Infrastructure Architect,Storage Systems; Virtualization (VMware/KVM); Networking; Data Centers
+Virtualization Engineer,Proxmox; Nutanix; VDI; Hypervisors; Cloud Migration
+Storage Administrator,NAS/SAN; Fiber Channel; Backup Strategies; Disaster Recovery
+Mainframe Developer,COBOL; JCL; DB2; IBM z/OS; Legacy Systems
+HPC Engineer,Parallel Programming; MPI/OpenMP; Slurm; Cluster Management
+Site Scraper,Scrapy; Selenium; BeautifulSoup; Proxy Management; Data Parsing
+Data Privacy Officer,GDPR; Compliance Audits; Data Governance; Policy Writing
+Compliance Engineer,Regulatory Frameworks; SOC2/ISO 27001; Audit Support; Security Policies
+Technical Training Specialist,Curriculum Design; Workshops; Video Tutorials; Presentation Skills
+Developer Relations (DevRel),Community Building; Developer Advocacy; Events; Open Source
+Open Source Contributor,Git Flow; Code Review; Community Engagement; Project Maintenance
+IT Manager,Budgeting; Team Leadership; Vendor Management; Strategy
+Chief Technology Officer (CTO),Tech Strategy; Innovation; Leadership; Scaling
+Chief Information Security Officer (CISO),Risk Management; Security Strategy; Leadership; Governance
