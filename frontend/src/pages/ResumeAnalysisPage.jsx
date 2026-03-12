@@ -24,13 +24,13 @@ export default function ResumeAnalysisPage({ token, user, result, onProfileUpdat
       setResumeFile(file);
       setMessage('');
     } else if (file) {
-      setMessage('❌ Please upload a PDF file.');
+      setMessage('Please upload a PDF file.');
     }
   };
 
   const handleUpload = async () => {
     if (!resumeFile) {
-      setMessage('❌ Please select a resume file first.');
+      setMessage('Please select a resume file first.');
       return;
     }
 
@@ -53,10 +53,10 @@ export default function ResumeAnalysisPage({ token, user, result, onProfileUpdat
 
       const data = await resp.json();
       onProfileUpdate(data.user, data.analysis);
-      setMessage(`✅ Resume Analyzed!`);
+      setMessage('Resume Analyzed!');
       setResumeFile(null);
     } catch (err) {
-      setMessage(`❌ ${err.message}`);
+      setMessage(err.message);
     } finally {
       setUploading(false);
     }
@@ -198,7 +198,7 @@ export default function ResumeAnalysisPage({ token, user, result, onProfileUpdat
                 >
                   Run Neural Analysis
                 </Button>
-                {message && <Alert status={message.startsWith('✅') ? 'success' : 'error'} title={message} variant="subtle" borderRadius="xl" />}
+                {message && <Alert status={message.startsWith('Resume Analyzed!') ? 'success' : 'error'} title={message} variant="subtle" borderRadius="xl" />}
               </VStack>
             </Card.Body>
           </Card.Root>
