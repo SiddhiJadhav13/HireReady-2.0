@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse, FileResponse, StreamingResponse, JSO
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import List, Optional
 import os
 from dotenv import load_dotenv
 import joblib
@@ -19,12 +19,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 import json
-import os
 from groq import Groq
 from PyPDF2 import PdfReader
 from sqlalchemy.orm.session import Session
 from sqlalchemy import text
-from typing import Optional, List
 from datetime import datetime, timedelta, timezone
 
 from services.role_engine import rank_roles
@@ -42,9 +40,10 @@ from services.auth import (
 )
 
 logger = logging.getLogger(__name__)
+BASE_DIR = Path(__file__).resolve().parent
 
 # Ensure EMAIL_* / SMTP_* vars from .env are available in this module.
-load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
+load_dotenv(dotenv_path=BASE_DIR / ".env")
 
 # ── Create database tables on startup ─────────────────────────────────────────
 Base.metadata.create_all(bind=engine)
@@ -101,18 +100,18 @@ def ensure_db_schema_compatibility() -> None:
 ensure_db_schema_compatibility()
 
 # ── Load ML model & columns ──────────────────────────────────────────────────
-model = joblib.load("readiness_model.pkl")
-feature_columns = joblib.load("feature_columns.pkl")
+model = joblib.load(BASE_DIR / "readiness_model.pkl")
+feature_columns = joblib.load(BASE_DIR / "feature_columns.pkl")
 
 # Roadmap Prediction Models
-roadmap_model = joblib.load("roadmap_model.pkl")
-roadmap_mlb = joblib.load("roadmap_mlb.pkl")
-roadmap_vectorizer = joblib.load("roadmap_vectorizer.pkl")
+roadmap_model = joblib.load(BASE_DIR / "roadmap_model.pkl")
+roadmap_mlb = joblib.load(BASE_DIR / "roadmap_mlb.pkl")
+roadmap_vectorizer = joblib.load(BASE_DIR / "roadmap_vectorizer.pkl")
 
 # Precompute/Cache Skills for Roadmap
 ROLE_SKILLS_CACHE = {}
 try:
-    df_roles = pd.read_csv("technical_roles_and_skills.csv")
+    df_roles = pd.read_csv(BASE_DIR / "technical_roles_and_skills.csv")
     for _, row in df_roles.iterrows():
         # Map normalized role name to list of skills
         role_name = str(row["Role"]).strip().lower()
@@ -136,7 +135,6 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 # Paths for serving the built frontend
-BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
 FRONTEND_INDEX = FRONTEND_DIST / "index.html"
 FRONTEND_ASSETS = FRONTEND_DIST / "assets"
