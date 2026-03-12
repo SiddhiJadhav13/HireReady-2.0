@@ -83,6 +83,7 @@ def ensure_db_schema_compatibility() -> None:
         conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS achievements TEXT DEFAULT ''"))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS resume_score DOUBLE PRECISION'))
         conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS resume_filename VARCHAR(255) DEFAULT ''"))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS resume_url TEXT DEFAULT ''"))
         conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS resume_text TEXT DEFAULT ''"))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS password_reset_token VARCHAR(100)'))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS password_reset_expires TIMESTAMP WITH TIME ZONE'))
@@ -139,6 +140,9 @@ BASE_DIR = Path(__file__).resolve().parent
 FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
 FRONTEND_INDEX = FRONTEND_DIST / "index.html"
 FRONTEND_ASSETS = FRONTEND_DIST / "assets"
+UPLOADS_DIR = BASE_DIR / "uploads"
+RESUMES_DIR = UPLOADS_DIR / "resumes"
+RESUMES_DIR.mkdir(parents=True, exist_ok=True)
 
 # Allow CORS for the React dev server
 app.add_middleware(
@@ -157,6 +161,9 @@ else:
     PUBLIC_DIR = BASE_DIR / "frontend" / "public"
     if PUBLIC_DIR.exists():
         app.mount("/assets", StaticFiles(directory=PUBLIC_DIR), name="assets")
+
+if UPLOADS_DIR.exists():
+    app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -790,9 +797,15 @@ async def update_profile(
                 extracted = page.extract_text()
                 if extracted:
                     text += extracted + "\n"
+
+            safe_suffix = Path(filename).name.replace(" ", "_")
+            stored_name = f"{current_user.id}_{int(datetime.now(timezone.utc).timestamp())}_{safe_suffix}"
+            stored_path = RESUMES_DIR / stored_name
+            stored_path.write_bytes(pdf_bytes)
             
             # Save strictly necessary fields
             current_user.resume_filename = filename
+            current_user.resume_url = f"/uploads/resumes/{stored_name}"
             current_user.resume_text = text  # Store text for analysis
             
             new_resume_text = text
@@ -818,6 +831,7 @@ async def update_profile(
             "id": str(current_user.id),
             "name": current_user.name,
             "resume_filename": current_user.resume_filename,
+            "resume_url": current_user.resume_url or "",
             "email": current_user.email,
             "github_username": current_user.github_username,
             "leetcode_username": current_user.leetcode_username,
@@ -1546,6 +1560,7 @@ def get_shortlisted_students(
                 "preferred_job_roles": s.preferred_job_roles or "",
                 "resume_text": s.resume_text or "",
                 "resume_score": resume_sc,
+                "resume_url": s.resume_url or "",
             },
             "match_score": match_score,
             "matched_skills": matched_skills,
@@ -1568,6 +1583,34 @@ def get_shortlisted_students(
         "shortlisted_students": shortlisted,
         "total": len(shortlisted),
     }
+
+
+@app.get("/api/students/{student_id}/resume")
+def get_student_resume(
+    student_id: str,
+    download: bool = False,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Return a shortlisted student's uploaded resume PDF for TPO viewing/downloading."""
+    _ = tpo  # Dependency enforces TPO access.
+    student = db.query(User).filter(User.id == student_id, User.role == "student").first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    resume_url = (student.resume_url or "").strip()
+    if not resume_url:
+        raise HTTPException(status_code=404, detail="Resume not uploaded")
+
+    relative_resume_path = resume_url.lstrip("/")
+    resume_path = BASE_DIR / relative_resume_path
+    if not resume_path.exists() or not resume_path.is_file():
+        raise HTTPException(status_code=404, detail="Resume not uploaded")
+
+    download_name = (student.resume_filename or f"{student.name}_resume.pdf").strip() or "resume.pdf"
+    disposition = "attachment" if download else "inline"
+    headers = {"Content-Disposition": f'{disposition}; filename="{download_name}"'}
+    return FileResponse(path=resume_path, media_type="application/pdf", headers=headers)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

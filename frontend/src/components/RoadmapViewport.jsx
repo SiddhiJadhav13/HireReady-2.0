@@ -140,7 +140,7 @@ export default function RoadmapViewport({ data, onBack, skillName }) {
 
       {/* Resource Tabs */}
       <Heading size="sm" color="gray.100" mb={3}>
-        📚 Resources for <Text as="span" color="blue.400">{skillName}</Text>
+        Resources for <Text as="span" color="blue.400">{skillName}</Text>
       </Heading>
 
       <Flex gap={2} mb={5} wrap="wrap">
@@ -252,7 +252,7 @@ export default function RoadmapViewport({ data, onBack, skillName }) {
                 </HStack>
                 <Icon asChild w={3.5} h={3.5} color="gray.500"><ExternalLink /></Icon>
               </Flex>
-              <Text color="gray.600" fontSize="xs" mb={1}>📺 {vid.channel}</Text>
+              <Text color="gray.600" fontSize="xs" mb={1}>{vid.channel}</Text>
               <Text color="gray.500" fontSize="xs">{vid.description}</Text>
             </Box>
           ))}

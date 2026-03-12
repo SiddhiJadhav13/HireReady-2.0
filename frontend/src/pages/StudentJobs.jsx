@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   Box, Flex, Heading, Text, Spinner, SimpleGrid, Badge, VStack, HStack, Icon, Button, Image,
 } from '@chakra-ui/react';
-import { Target, BarChart3, Award, Lightbulb, DollarSign, ClipboardCheck, CalendarClock, Heart } from 'lucide-react';
+import { Target, BarChart3, Award, Lightbulb, DollarSign, ClipboardCheck, CalendarClock } from 'lucide-react';
 
 const API_BASE = '/api';
 
@@ -154,9 +154,6 @@ export default function StudentJobs({ token }) {
                   loadingText={isInterested ? 'Removing…' : 'Marking…'}
                   onClick={() => toggleInterest(j.id)}
                 >
-                  <Icon asChild w={4} h={4} mr={1}>
-                    <Heart fill={isInterested ? 'currentColor' : 'none'} />
-                  </Icon>
                   {isInterested ? 'Interested ✓' : 'Interested'}
                 </Button>
               </Box>

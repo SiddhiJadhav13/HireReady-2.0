@@ -8,6 +8,9 @@ import { Alert } from '@/components/ui/alert';
 import { Field } from '@/components/ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  DialogRoot, DialogContent, DialogHeader, DialogBody, DialogTitle, DialogCloseTrigger,
+} from '@/components/ui/dialog';
+import {
   MenuContent, MenuItem, MenuRoot, MenuTrigger,
 } from '@/components/ui/menu';
 import { Avatar } from '@/components/ui/avatar';
@@ -48,6 +51,10 @@ export default function TpoDashboard({ token, user, onLogout }) {
   const [shortlistedTotal, setShortlistedTotal] = useState(0);
   const [notifying, setNotifying] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [resumeViewerOpen, setResumeViewerOpen] = useState(false);
+  const [resumeViewerUrl, setResumeViewerUrl] = useState('');
+  const [resumeViewerStudent, setResumeViewerStudent] = useState('');
+  const [loadingResumeId, setLoadingResumeId] = useState('');
 
   /* Interested Students */
   const [interestedStudents, setInterestedStudents] = useState([]);
@@ -174,6 +181,57 @@ export default function TpoDashboard({ token, user, onLogout }) {
     const safeJob = shortlistedJob?.title ? shortlistedJob.title.replace(/[^a-z0-9]+/gi, '_').toLowerCase() : 'students';
     XLSX.writeFile(workbook, `shortlisted_${safeJob}.xlsx`);
   };
+
+  const closeResumeViewer = () => {
+    setResumeViewerOpen(false);
+    if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
+    setResumeViewerUrl('');
+    setResumeViewerStudent('');
+  };
+
+  const openResumeViewer = async (studentId, studentName) => {
+    setLoadingResumeId(studentId);
+    try {
+      const res = await fetch(`${API_BASE}/students/${studentId}/resume`, { headers: authHeaders });
+      if (!res.ok) {
+        let detail = 'Resume not uploaded';
+        try {
+          const data = await res.json();
+          detail = data.detail || detail;
+        } catch {
+          // Keep default message when response body is not JSON.
+        }
+        toaster.create({ title: detail === 'Resume not uploaded' ? 'Resume not uploaded' : detail, type: 'warning' });
+        return;
+      }
+
+      const blob = await res.blob();
+      if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
+      const blobUrl = URL.createObjectURL(blob);
+      setResumeViewerUrl(blobUrl);
+      setResumeViewerStudent(studentName || 'Student');
+      setResumeViewerOpen(true);
+    } catch {
+      toaster.create({ title: 'Failed to load resume', type: 'error' });
+    } finally {
+      setLoadingResumeId('');
+    }
+  };
+
+  const downloadViewedResume = () => {
+    if (!resumeViewerUrl) return;
+    const safeName = (resumeViewerStudent || 'resume').replace(/[^a-z0-9]+/gi, '_').toLowerCase() || 'resume';
+    const anchor = document.createElement('a');
+    anchor.href = resumeViewerUrl;
+    anchor.download = `${safeName}.pdf`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  };
+
+  useEffect(() => () => {
+    if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
+  }, [resumeViewerUrl]);
 
   /* ── View interested students ── */
   const viewInterested = async (jobId) => {
@@ -493,7 +551,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>#</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Student Name</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Roll Number</Table.ColumnHeader>
-                        <Table.ColumnHeader color="gray.300" px={4} py={3}>Department</Table.ColumnHeader>
+                        <Table.ColumnHeader color="gray.300" px={4} py={3}>Division</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Email</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Resume Score</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>CGPA</Table.ColumnHeader>
@@ -593,7 +651,19 @@ export default function TpoDashboard({ token, user, onLogout }) {
                       <Flex flexWrap="wrap" gap={2} mb={2}>
                         {item.student.cgpa != null && <Badge colorPalette="blue" fontSize="xs">CGPA: {item.student.cgpa}</Badge>}
                         {item.student.mobile_number && <Badge colorPalette="gray" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><Phone /></Icon>{item.student.mobile_number}</Badge>}
-                        <Badge colorPalette="green" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><FileText /></Icon>Resume: {item.student.resume_score}</Badge>
+                        <HStack gap={2}>
+                          <Badge colorPalette="green" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><FileText /></Icon>Resume: {item.student.resume_score}</Badge>
+                          <Button
+                            size="sm"
+                            colorPalette="green"
+                            variant="outline"
+                            loading={loadingResumeId === item.student.id}
+                            loadingText="Opening..."
+                            onClick={() => openResumeViewer(item.student.id, item.student.name)}
+                          >
+                            View Resume
+                          </Button>
+                        </HStack>
                       </Flex>
                       {item.matched_skills?.length > 0 && (
                         <Box mb={2}>
@@ -630,6 +700,36 @@ export default function TpoDashboard({ token, user, onLogout }) {
               )}
             </Box>
           )}
+
+          <DialogRoot open={resumeViewerOpen} onOpenChange={(e) => { if (!e.open) closeResumeViewer(); }} size="xl">
+            <DialogContent bg="gray.900" border="1px solid" borderColor="gray.700" maxW="80vw" w="80vw">
+              <DialogHeader>
+                <HStack w="full" justify="space-between" align="center" pr={8}>
+                  <DialogTitle color="gray.100">{resumeViewerStudent} Resume</DialogTitle>
+                  <Button size="sm" colorPalette="green" variant="outline" onClick={downloadViewedResume}>
+                    <Icon asChild w={4} h={4} mr={1}><Download /></Icon>
+                    Download Resume
+                  </Button>
+                </HStack>
+              </DialogHeader>
+              <DialogCloseTrigger />
+              <DialogBody pb={4}>
+                {resumeViewerUrl ? (
+                  <Box
+                    as="iframe"
+                    src={resumeViewerUrl}
+                    title="Student Resume"
+                    w="100%"
+                    h="70vh"
+                    border="0"
+                    borderRadius="md"
+                  />
+                ) : (
+                  <Text color="gray.400">Resume not uploaded</Text>
+                )}
+              </DialogBody>
+            </DialogContent>
+          </DialogRoot>
         </Box>
       </Flex>
     </Flex>
