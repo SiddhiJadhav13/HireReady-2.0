@@ -20,9 +20,11 @@ const PASSWORD_RULES = [
 
 export default function LoginPage({ onLogin, onBack }) {
   const [mode, setMode] = useState('login'); // login | register | forgotPassword | resetPassword
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -37,10 +39,17 @@ export default function LoginPage({ onLogin, onBack }) {
     e.preventDefault();
     setError('');
     if (!email.trim() || !password.trim()) { setError('Please fill in all fields.'); return; }
-    if (mode === 'register' && !name.trim()) { setError('Please enter your name.'); return; }
+    if (mode === 'register' && (!firstName.trim() || !lastName.trim())) {
+      setError('Please enter first name and last name.');
+      return;
+    }
 
     // Password validation for registration
     if (mode === 'register') {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
       const failedRules = PASSWORD_RULES.filter(r => !r.test(password));
       if (failedRules.length > 0) {
         setError('Password must contain: ' + failedRules.map(r => r.label).join(', '));
@@ -57,7 +66,13 @@ export default function LoginPage({ onLogin, onBack }) {
       const formattedEmail = `${email.trim()}@apsit.edu.in`;
       const body = mode === 'login'
         ? { email: formattedEmail, password }
-        : { name: name.trim(), email: formattedEmail, password };
+        : {
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          name: `${firstName.trim()} ${lastName.trim()}`.trim(),
+          email: formattedEmail,
+          password,
+        };
 
       const resp = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
@@ -272,11 +287,21 @@ export default function LoginPage({ onLogin, onBack }) {
             <form onSubmit={handleSubmit}>
               <VStack gap={4} align="stretch">
                 {mode === 'register' && (
-                  <Field label="Full Name">
+                  <Field label="First Name">
                     <Input
-                      placeholder="Enter your full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your first name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      {...inputStyles}
+                    />
+                  </Field>
+                )}
+                {mode === 'register' && (
+                  <Field label="Last Name">
+                    <Input
+                      placeholder="Enter your last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       {...inputStyles}
                     />
                   </Field>
@@ -301,6 +326,16 @@ export default function LoginPage({ onLogin, onBack }) {
                     {...inputStyles}
                   />
                 </Field>
+                {mode === 'register' && (
+                  <Field label="Confirm Password">
+                    <PasswordInput
+                      placeholder="••••••••"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      {...inputStyles}
+                    />
+                  </Field>
+                )}
 
 
                 <Button

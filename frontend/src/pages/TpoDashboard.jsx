@@ -3,7 +3,6 @@ import {
   Box, Flex, Heading, Text, Input, Button, VStack, HStack,
   SimpleGrid, Badge, Spinner, Textarea, Icon, Image, Table,
 } from '@chakra-ui/react';
-import * as XLSX from 'xlsx';
 import { Alert } from '@/components/ui/alert';
 import { Field } from '@/components/ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -15,16 +14,47 @@ import {
 } from '@/components/ui/menu';
 import { Avatar } from '@/components/ui/avatar';
 import { toaster } from '@/components/ui/toaster';
+import ConfirmationModal from '@/components/ConfirmationModal';
 import {
   LogOut, Target, BarChart3, DollarSign, CalendarClock,
-  Award, Lightbulb, Phone, FileText, ChevronLeft, Download, Bell, Users, Upload,
+  Award, Lightbulb, Phone, FileText, ChevronLeft, ChevronDown, Download, Bell, Users, Upload,
 } from 'lucide-react';
 
 const API_BASE = '/api';
 
+const normalizeShortlistedItem = (item) => {
+  const hasNestedStudent = Boolean(item && typeof item.student === 'object' && item.student);
+  const nested = hasNestedStudent ? item.student : {};
+  const source = hasNestedStudent ? nested : (item || {});
+  const student = {
+    id: String(source.id ?? ''),
+    name: source.name ?? '',
+    email: source.email ?? '',
+    mobile_number: source.mobile_number ?? '',
+    cgpa: source.cgpa ?? null,
+    certifications: source.certifications ?? '',
+    preferred_job_roles: source.preferred_job_roles ?? '',
+    resume_text: source.resume_text ?? '',
+    resume_score: source.resume_score ?? null,
+    resume_url: String(source.resume_url ?? '').trim(),
+  };
+
+  return {
+    ...item,
+    id: student.id,
+    name: student.name,
+    email: student.email,
+    cgpa: student.cgpa,
+    resume_score: student.resume_score,
+    resume_url: student.resume_url,
+    student,
+  };
+};
+
 export default function TpoDashboard({ token, user, onLogout }) {
   const [tab, setTab] = useState('jobs');
   const [jobs, setJobs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loadingJobs, setLoadingJobs] = useState(false);
 
   /* New-job form */
@@ -34,6 +64,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
   const [eligibility, setEligibility] = useState('');
   const [jobRole, setJobRole] = useState('');
   const [minCgpa, setMinCgpa] = useState('');
+  const [minResumeScore, setMinResumeScore] = useState('');
   const [requiredCerts, setRequiredCerts] = useState('');
   const [preferredSkills, setPreferredSkills] = useState('');
   const [packageLpa, setPackageLpa] = useState('');
@@ -46,11 +77,15 @@ export default function TpoDashboard({ token, user, onLogout }) {
   /* Shortlisted */
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [shortlisted, setShortlisted] = useState([]);
+  const [autoShortlisted, setAutoShortlisted] = useState([]);
+  const [manualShortlisted, setManualShortlisted] = useState([]);
   const [shortlistedJob, setShortlistedJob] = useState(null);
   const [loadingShortlisted, setLoadingShortlisted] = useState(false);
   const [shortlistedTotal, setShortlistedTotal] = useState(0);
   const [notifying, setNotifying] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [loadingAllResumes, setLoadingAllResumes] = useState(false);
+  const [loadingSelectedResumes, setLoadingSelectedResumes] = useState(false);
   const [resumeViewerOpen, setResumeViewerOpen] = useState(false);
   const [resumeViewerUrl, setResumeViewerUrl] = useState('');
   const [resumeViewerStudent, setResumeViewerStudent] = useState('');
@@ -62,6 +97,12 @@ export default function TpoDashboard({ token, user, onLogout }) {
   const [loadingInterested, setLoadingInterested] = useState(false);
   const [interestedTotal, setInterestedTotal] = useState(0);
   const [exporting, setExporting] = useState(false);
+  const [shortlistingAll, setShortlistingAll] = useState(false);
+  const [shortlistingStudentId, setShortlistingStudentId] = useState('');
+  const [loadingExcel, setLoadingExcel] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedJobForDelete, setSelectedJobForDelete] = useState(null);
+  const [deletingJob, setDeletingJob] = useState(false);
 
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
   const authHeaders = { Authorization: `Bearer ${token}` };
@@ -95,6 +136,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
       formData.append('eligibility', eligibility);
       formData.append('job_role', jobRole);
       formData.append('min_cgpa', minCgpa || '');
+      formData.append('min_resume_score', minResumeScore || '');
       formData.append('required_certifications', requiredCerts);
       formData.append('preferred_skills', preferredSkills);
       formData.append('package_lpa', packageLpa || '');
@@ -109,7 +151,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
       if (res.ok) {
         setPostMsg('Job posted successfully!');
         setTitle(''); setCompany(''); setDescription(''); setEligibility(''); setDeadline('');
-        setJobRole(''); setMinCgpa(''); setRequiredCerts(''); setPreferredSkills(''); setPackageLpa('');
+        setJobRole(''); setMinCgpa(''); setMinResumeScore(''); setRequiredCerts(''); setPreferredSkills(''); setPackageLpa('');
         setCompanyLogo(null); setLogoPreview('');
         fetchJobs();
       } else {
@@ -135,9 +177,39 @@ export default function TpoDashboard({ token, user, onLogout }) {
 
   /* ── Delete job ── */
   const handleDelete = async (jobId) => {
-    if (!confirm('Delete this job posting?')) return;
-    await fetch(`${API_BASE}/tpo/jobs/${jobId}`, { method: 'DELETE', headers });
-    fetchJobs();
+    setSelectedJobForDelete(jobId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteJob = async () => {
+    if (!selectedJobForDelete) {
+      setShowDeleteModal(false);
+      return;
+    }
+
+    setDeletingJob(true);
+    try {
+      const res = await fetch(`${API_BASE}/tpo/jobs/${selectedJobForDelete}`, { method: 'DELETE', headers });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toaster.create({ title: data.detail || 'Failed to delete job posting', type: 'error' });
+        return;
+      }
+      setShowDeleteModal(false);
+      setSelectedJobForDelete(null);
+      fetchJobs();
+      toaster.create({ title: 'Job deleted successfully', type: 'success' });
+    } catch {
+      toaster.create({ title: 'Failed to delete job posting', type: 'error' });
+    } finally {
+      setDeletingJob(false);
+    }
+  };
+
+  const cancelDeleteJob = () => {
+    if (deletingJob) return;
+    setShowDeleteModal(false);
+    setSelectedJobForDelete(null);
   };
 
   /* ── View shortlisted ── */
@@ -147,11 +219,47 @@ export default function TpoDashboard({ token, user, onLogout }) {
       const res = await fetch(`${API_BASE}/tpo/jobs/${jobId}/shortlisted`, { headers });
       if (res.ok) {
         const data = await res.json();
-        setShortlisted(data.shortlisted_students || []);
+        const hasSplitLists = Array.isArray(data.auto_shortlisted_students) || Array.isArray(data.manual_shortlisted_students);
+        const combinedItems = (data.shortlisted_students || []).map(normalizeShortlistedItem);
+        const autoItems = hasSplitLists
+          ? (data.auto_shortlisted_students || []).map(normalizeShortlistedItem)
+          : combinedItems.filter((item) => (item.source || 'auto') !== 'manual');
+        const manualItems = hasSplitLists
+          ? (data.manual_shortlisted_students || []).map(normalizeShortlistedItem)
+          : combinedItems.filter((item) => item.source === 'manual');
+        const normalized = hasSplitLists ? [...autoItems, ...manualItems] : combinedItems;
+        setAutoShortlisted(autoItems);
+        setManualShortlisted(manualItems);
+        setShortlisted(normalized);
         setShortlistedJob(data.job || null);
-        setShortlistedTotal(data.total || 0);
+        setShortlistedTotal(data.total ?? normalized.length);
       }
     } catch { /* */ } finally { setLoadingShortlisted(false); }
+  };
+
+  const refreshShortlisted = async (jobId) => {
+    if (!jobId) return;
+    try {
+      const res = await fetch(`${API_BASE}/tpo/jobs/${jobId}/shortlisted`, { headers });
+      if (!res.ok) return;
+      const data = await res.json();
+      const hasSplitLists = Array.isArray(data.auto_shortlisted_students) || Array.isArray(data.manual_shortlisted_students);
+      const combinedItems = (data.shortlisted_students || []).map(normalizeShortlistedItem);
+      const autoItems = hasSplitLists
+        ? (data.auto_shortlisted_students || []).map(normalizeShortlistedItem)
+        : combinedItems.filter((item) => (item.source || 'auto') !== 'manual');
+      const manualItems = hasSplitLists
+        ? (data.manual_shortlisted_students || []).map(normalizeShortlistedItem)
+        : combinedItems.filter((item) => item.source === 'manual');
+      const normalized = hasSplitLists ? [...autoItems, ...manualItems] : combinedItems;
+      setAutoShortlisted(autoItems);
+      setManualShortlisted(manualItems);
+      setShortlisted(normalized);
+      setShortlistedJob(data.job || null);
+      setShortlistedTotal(data.total ?? normalized.length);
+    } catch {
+      // Keep current state on background refresh failure.
+    }
   };
 
   const toggleStudentSelection = (studentId) => {
@@ -162,60 +270,139 @@ export default function TpoDashboard({ token, user, onLogout }) {
     ));
   };
 
-  const downloadShortlistedExcel = () => {
+  const downloadShortlistedExcel = async () => {
     if (!shortlisted.length) return;
-    const rows = shortlisted.map((item) => ({
-      'Student Name': item.student.name || '',
-      Email: item.student.email || '',
-      Phone: item.student.mobile_number || '',
-      CGPA: item.student.cgpa ?? '',
-      'Resume Score': item.student.resume_score ?? '',
-      'Match Percentage': item.match_score ?? '',
-      Certifications: item.student.certifications || '',
-      'Preferred Role': item.student.preferred_job_roles || '',
-    }));
+    setLoadingExcel(true);
+    try {
+      const res = await fetch(`${API_BASE}/tpo/jobs/${selectedJobId}/shortlisted/export`, {
+        headers: authHeaders,
+      });
+      if (!res.ok) {
+        let message = 'Failed to download Excel';
+        try {
+          const data = await res.json();
+          message = data.detail || message;
+        } catch {
+          // Keep generic message when response isn't JSON.
+        }
+        toaster.create({ title: message, type: 'error' });
+        return;
+      }
 
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Shortlisted Students');
-    const safeJob = shortlistedJob?.title ? shortlistedJob.title.replace(/[^a-z0-9]+/gi, '_').toLowerCase() : 'students';
-    XLSX.writeFile(workbook, `shortlisted_${safeJob}.xlsx`);
+      await triggerZipDownload(res, 'shortlisted_students.xlsx');
+      toaster.create({ title: 'Download started', type: 'success' });
+    } finally {
+      setLoadingExcel(false);
+    }
   };
+
+  const renderShortlistedCards = (items, indexOffset = 0) => (
+    <VStack gap={3} align="stretch">
+      {items.map((item, idx) => (
+        <Box key={item.student.id} bg={selectedStudents.includes(item.student.id) ? 'purple.500/10' : 'gray.900'} border="1px solid"
+          borderColor={selectedStudents.includes(item.student.id) ? 'purple.500' : 'gray.800'}
+          borderRadius="xl" p={5}>
+          <Flex justify="space-between" align="flex-start" mb={3}>
+            <Box>
+              <HStack gap={2} mb={1} align="center">
+                <Checkbox
+                  checked={selectedStudents.includes(item.student.id)}
+                  onCheckedChange={() => toggleStudentSelection(item.student.id)}
+                />
+                <Badge colorPalette="purple" fontSize="xs">#{indexOffset + idx + 1}</Badge>
+                <Heading size="sm" color="gray.100">{item.student.name}</Heading>
+              </HStack>
+              <Text fontSize="xs" color="gray.500">{item.student.email}</Text>
+            </Box>
+            <Box textAlign="center" bg="purple.500/15" px={3} py={2} borderRadius="lg">
+              <Text fontWeight="700" color="purple.300" fontSize="lg">{item.match_score}%</Text>
+              <Text fontSize="xs" color="gray.400">Match</Text>
+            </Box>
+          </Flex>
+          <Flex flexWrap="wrap" gap={2} mb={2}>
+            {item.student.cgpa != null && <Badge colorPalette="blue" fontSize="xs">CGPA: {item.student.cgpa}</Badge>}
+            {item.student.mobile_number && <Badge colorPalette="gray" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><Phone /></Icon>{item.student.mobile_number}</Badge>}
+            <HStack gap={2}>
+              <Badge colorPalette="green" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><FileText /></Icon>Resume: {item.student.resume_score}</Badge>
+              <Button
+                size="sm"
+                colorPalette="green"
+                variant="outline"
+                loading={loadingResumeId === item.student.id}
+                loadingText="Opening..."
+                onClick={() => handleViewResume(item.student)}
+              >
+                View Resume
+              </Button>
+            </HStack>
+          </Flex>
+          {item.matched_skills?.length > 0 && (
+            <Box mb={2}>
+              <Text fontSize="xs" color="gray.500" mb={1}>Matched Skills:</Text>
+              <Flex flexWrap="wrap" gap={1}>
+                {item.matched_skills.map((s, i) => (
+                  <Badge key={i} colorPalette="green" fontSize="xs" variant="subtle">{s}</Badge>
+                ))}
+              </Flex>
+            </Box>
+          )}
+          {item.student.certifications && (
+            <Box mb={2}>
+              <Text fontSize="xs" color="gray.500" mb={1}>Certifications:</Text>
+              <Flex flexWrap="wrap" gap={1}>
+                {item.student.certifications.split(',').map((c, i) => (
+                  <Badge key={i} fontSize="xs"
+                    colorPalette={item.matched_certifications?.includes(c.trim().toLowerCase()) ? 'green' : 'gray'}
+                  >
+                    {c.trim()}
+                  </Badge>
+                ))}
+              </Flex>
+            </Box>
+          )}
+          {item.student.preferred_job_roles && (
+            <Text fontSize="xs" color="gray.500">
+              Preferred: <Text as="span" color="gray.300">{item.student.preferred_job_roles}</Text>
+            </Text>
+          )}
+        </Box>
+      ))}
+    </VStack>
+  );
 
   const closeResumeViewer = () => {
     setResumeViewerOpen(false);
-    if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
     setResumeViewerUrl('');
     setResumeViewerStudent('');
   };
 
-  const openResumeViewer = async (studentId, studentName) => {
-    setLoadingResumeId(studentId);
-    try {
-      const res = await fetch(`${API_BASE}/students/${studentId}/resume`, { headers: authHeaders });
-      if (!res.ok) {
-        let detail = 'Resume not uploaded';
-        try {
-          const data = await res.json();
-          detail = data.detail || detail;
-        } catch {
-          // Keep default message when response body is not JSON.
-        }
-        toaster.create({ title: detail === 'Resume not uploaded' ? 'Resume not uploaded' : detail, type: 'warning' });
-        return;
-      }
+  const normalizeResumeUrl = (rawUrl) => {
+    if (!rawUrl || !String(rawUrl).trim()) return '';
+    const url = String(rawUrl).trim();
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${window.location.origin}${url.startsWith('/') ? url : `/${url}`}`;
+  };
 
-      const blob = await res.blob();
-      if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
-      const blobUrl = URL.createObjectURL(blob);
-      setResumeViewerUrl(blobUrl);
-      setResumeViewerStudent(studentName || 'Student');
-      setResumeViewerOpen(true);
-    } catch {
-      toaster.create({ title: 'Failed to load resume', type: 'error' });
-    } finally {
+  const handleViewResume = (student) => {
+    const studentId = student.id || '';
+    const rawResumeUrl = student.resume_url;
+    setLoadingResumeId(studentId);
+
+    if (!rawResumeUrl) {
+      setResumeViewerUrl('');
+      setResumeViewerStudent('');
+      setResumeViewerOpen(false);
+      toaster.create({ title: 'Resume not uploaded', type: 'error' });
       setLoadingResumeId('');
+      return;
     }
+
+    const resolvedUrl = normalizeResumeUrl(rawResumeUrl);
+
+    setResumeViewerUrl(resolvedUrl);
+    setResumeViewerStudent(student.name || 'Student');
+    setResumeViewerOpen(true);
+    setLoadingResumeId('');
   };
 
   const downloadViewedResume = () => {
@@ -228,10 +415,6 @@ export default function TpoDashboard({ token, user, onLogout }) {
     anchor.click();
     document.body.removeChild(anchor);
   };
-
-  useEffect(() => () => {
-    if (resumeViewerUrl) URL.revokeObjectURL(resumeViewerUrl);
-  }, [resumeViewerUrl]);
 
   /* ── View interested students ── */
   const viewInterested = async (jobId) => {
@@ -269,6 +452,145 @@ export default function TpoDashboard({ token, user, onLogout }) {
     finally { setExporting(false); }
   };
 
+  const handleShortlistStudent = async (studentId) => {
+    if (!selectedJobId || !studentId) return;
+
+    if (shortlisted.some((item) => (item.student?.id || item.id) === studentId)) {
+      toaster.create({ title: 'Student already shortlisted', type: 'info' });
+      return;
+    }
+
+    setShortlistingStudentId(studentId);
+    try {
+      const studentToAppend = interestedStudents.find((s) => s.id === studentId);
+      const res = await fetch(`${API_BASE}/jobs/shortlist-student`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ job_id: selectedJobId, student_id: studentId }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toaster.create({ title: data.detail || 'Failed to shortlist student', type: 'error' });
+        return;
+      }
+
+      const result = await res.json().catch(() => ({}));
+      if (result?.already_shortlisted) {
+        toaster.create({ title: 'Student already shortlisted', type: 'info' });
+        refreshShortlisted(selectedJobId);
+        return;
+      }
+
+      if (studentToAppend) {
+        const appended = normalizeShortlistedItem({
+          student: {
+            id: studentToAppend.id,
+            name: studentToAppend.name,
+            email: studentToAppend.email,
+            mobile_number: '',
+            cgpa: studentToAppend.cgpa,
+            certifications: '',
+            preferred_job_roles: '',
+            resume_text: '',
+            resume_score: studentToAppend.resume_score,
+            resume_url: '',
+          },
+          match_score: 0,
+          matched_skills: [],
+          matched_certifications: [],
+          source: 'manual',
+        });
+
+        setManualShortlisted((prev) => {
+          if (prev.some((item) => (item.student?.id || item.id) === studentId)) return prev;
+          return [...prev, appended];
+        });
+        setShortlisted((prev) => {
+          if (prev.some((item) => (item.student?.id || item.id) === studentId)) return prev;
+          return [...prev, appended];
+        });
+      }
+
+      setInterestedStudents((prev) => prev.filter((s) => s.id !== studentId));
+      setInterestedTotal((prev) => Math.max(0, prev - 1));
+      refreshShortlisted(selectedJobId);
+      toaster.create({ title: 'Student shortlisted', type: 'success' });
+    } catch {
+      toaster.create({ title: 'Failed to shortlist student', type: 'error' });
+    } finally {
+      setShortlistingStudentId('');
+    }
+  };
+
+  const handleShortlistAll = async () => {
+    if (!selectedJobId || interestedStudents.length === 0) return;
+
+    const existingShortlistedIds = new Set(shortlisted.map((item) => item.student?.id || item.id));
+    const studentsToShortlist = interestedStudents.filter((s) => !existingShortlistedIds.has(s.id));
+
+    if (studentsToShortlist.length === 0) {
+      toaster.create({ title: 'All selected students are already shortlisted', type: 'info' });
+      return;
+    }
+
+    setShortlistingAll(true);
+    try {
+      const studentIds = studentsToShortlist.map((s) => s.id);
+      const res = await fetch(`${API_BASE}/jobs/shortlist-all`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ job_id: selectedJobId, student_ids: studentIds }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        toaster.create({ title: data.detail || 'Failed to shortlist all students', type: 'error' });
+        return;
+      }
+
+      const additions = studentsToShortlist.map((s) => normalizeShortlistedItem({
+        student: {
+          id: s.id,
+          name: s.name,
+          email: s.email,
+          mobile_number: '',
+          cgpa: s.cgpa,
+          certifications: '',
+          preferred_job_roles: '',
+          resume_text: '',
+          resume_score: s.resume_score,
+          resume_url: '',
+        },
+        match_score: 0,
+        matched_skills: [],
+        matched_certifications: [],
+        source: 'manual',
+      }));
+
+      setManualShortlisted((prev) => {
+        const existingIds = new Set(prev.map((item) => item.student?.id || item.id));
+        const newItems = additions.filter((item) => !existingIds.has(item.student.id));
+        return newItems.length ? [...prev, ...newItems] : prev;
+      });
+      setShortlisted((prev) => {
+        const existingIds = new Set(prev.map((item) => item.student?.id || item.id));
+        const newItems = additions.filter((item) => !existingIds.has(item.student.id));
+        return newItems.length ? [...prev, ...newItems] : prev;
+      });
+
+      const shortlistedIdSet = new Set(studentIds);
+      setInterestedStudents((prev) => prev.filter((s) => !shortlistedIdSet.has(s.id)));
+      setInterestedTotal((prev) => Math.max(0, prev - studentIds.length));
+      refreshShortlisted(selectedJobId);
+      toaster.create({ title: 'All interested students shortlisted', type: 'success' });
+    } catch {
+      toaster.create({ title: 'Failed to shortlist all students', type: 'error' });
+    } finally {
+      setShortlistingAll(false);
+    }
+  };
+
   /* ── Notify shortlisted students ── */
   const notifyShortlisted = async () => {
     if (!selectedJobId) return;
@@ -295,12 +617,99 @@ export default function TpoDashboard({ token, user, onLogout }) {
     finally { setNotifying(false); }
   };
 
+  const triggerZipDownload = async (res, fallbackName) => {
+    const blob = await res.blob();
+    const contentDisposition = res.headers.get('Content-Disposition') || '';
+    const match = contentDisposition.match(/filename=\"?([^\";]+)\"?/i);
+    const filename = (match?.[1] || fallbackName).trim();
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadAllResumes = async () => {
+    if (!selectedJobId) return;
+    setLoadingAllResumes(true);
+    try {
+      const res = await fetch(`${API_BASE}/resumes/download-all?job_id=${encodeURIComponent(selectedJobId)}`, {
+        headers: authHeaders,
+      });
+      if (!res.ok) {
+        let message = 'Failed to download resumes';
+        try {
+          const data = await res.json();
+          message = data.detail || message;
+        } catch {
+          // Keep generic message when response isn't JSON.
+        }
+        toaster.create({ title: message, type: 'error' });
+        return;
+      }
+      await triggerZipDownload(res, 'shortlisted_all_resumes.zip');
+      toaster.create({ title: 'Download started', type: 'success' });
+    } catch {
+      toaster.create({ title: 'Failed to download resumes', type: 'error' });
+    } finally {
+      setLoadingAllResumes(false);
+    }
+  };
+
+  const downloadSelectedResumes = async () => {
+    if (!selectedStudents.length) {
+      toaster.create({ title: 'Please select at least one student.', type: 'warning' });
+      return;
+    }
+    setLoadingSelectedResumes(true);
+    try {
+      const res = await fetch(`${API_BASE}/resumes/download-selected`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ student_ids: selectedStudents, job_id: selectedJobId }),
+      });
+      if (!res.ok) {
+        let message = 'Failed to download selected resumes';
+        try {
+          const data = await res.json();
+          message = data.detail || message;
+        } catch {
+          // Keep generic message when response isn't JSON.
+        }
+        toaster.create({ title: message, type: 'error' });
+        return;
+      }
+      await triggerZipDownload(res, 'shortlisted_selected_resumes.zip');
+      toaster.create({ title: 'Download started', type: 'success' });
+    } catch {
+      toaster.create({ title: 'Failed to download selected resumes', type: 'error' });
+    } finally {
+      setLoadingSelectedResumes(false);
+    }
+  };
+
   const NAV = [
     { key: 'post', label: 'Post Job' },
     { key: 'jobs', label: 'My Jobs' },
     { key: 'shortlisted', label: 'Shortlisted' },
     { key: 'interested', label: 'Interested' },
   ];
+  const isPreparingResumes = loadingAllResumes || loadingSelectedResumes;
+  const downloadButtonLabel = loadingExcel
+    ? 'Preparing Excel...'
+    : isPreparingResumes
+      ? 'Preparing resumes...'
+      : 'Download';
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const filteredJobs = jobs.filter((job) => {
+    if (!normalizedSearchQuery) return true;
+    const titleMatch = (job.title || '').toLowerCase().includes(normalizedSearchQuery);
+    const companyMatch = (job.company || '').toLowerCase().includes(normalizedSearchQuery);
+    return titleMatch || companyMatch;
+  });
 
   return (
     <Flex h="100vh" bg="gray.950">
@@ -433,6 +842,18 @@ export default function TpoDashboard({ token, user, onLogout }) {
                         onChange={e => setMinCgpa(e.target.value)} placeholder="e.g. 7.0" {...inputStyles} />
                     </Field>
                   </SimpleGrid>
+                  <Field label="Minimum Resume Score" helperText="Maximum is automatically considered as 100">
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="1"
+                      value={minResumeScore}
+                      onChange={e => setMinResumeScore(e.target.value)}
+                      placeholder="e.g. 60"
+                      {...inputStyles}
+                    />
+                  </Field>
                   <Field label="Required Certifications" helperText="Leave blank if none required">
                     <Input value={requiredCerts} onChange={e => setRequiredCerts(e.target.value)}
                       placeholder="e.g. AWS Cloud Practitioner" {...inputStyles} />
@@ -466,6 +887,16 @@ export default function TpoDashboard({ token, user, onLogout }) {
           {tab === 'jobs' && (
             <Box>
               <Heading size="lg" color="gray.100" mb={4}>My Job Postings</Heading>
+              <HStack justify="space-between" align="center" mb={6}>
+                <Input
+                  type="text"
+                  placeholder="Search jobs by title or company..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  maxW="320px"
+                  {...inputStyles}
+                />
+              </HStack>
               {loadingJobs ? (
                 <Flex justify="center" py={8}><Spinner color="purple.400" size="xl" /></Flex>
               ) : jobs.length === 0 ? (
@@ -473,9 +904,11 @@ export default function TpoDashboard({ token, user, onLogout }) {
                   <Text color="gray.500">No jobs posted yet.</Text>
                   <Button colorPalette="purple" onClick={() => setTab('post')}>Post Your First Job</Button>
                 </Flex>
+              ) : filteredJobs.length === 0 ? (
+                <Text color="gray.500" mt={6}>No jobs found.</Text>
               ) : (
                 <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                  {jobs.map(j => (
+                  {filteredJobs.map(j => (
                     <Box key={j.id} bg="gray.900" border="1px solid" borderColor="gray.800"
                       borderRadius="xl" p={5}>
                       <Flex gap={3} align="flex-start" mb={2}>
@@ -531,12 +964,26 @@ export default function TpoDashboard({ token, user, onLogout }) {
                     </Text>
                   )}
                 </Box>
-                {interestedStudents.length > 0 && (
-                  <Button size="sm" colorPalette="green" variant="outline" loading={exporting}
-                    loadingText="Exporting…" onClick={exportExcel}>
-                    <Icon asChild w={4} h={4} mr={1}><Download /></Icon> Download Excel
-                  </Button>
-                )}
+                <HStack gap={2}>
+                  {interestedStudents.length > 0 && (
+                    <Button
+                      size="sm"
+                      colorPalette="purple"
+                      variant="outline"
+                      loading={shortlistingAll}
+                      loadingText="Shortlisting..."
+                      onClick={handleShortlistAll}
+                    >
+                      Shortlist All
+                    </Button>
+                  )}
+                  {interestedStudents.length > 0 && (
+                    <Button size="sm" colorPalette="green" variant="outline" loading={exporting}
+                      loadingText="Exporting…" onClick={exportExcel}>
+                      <Icon asChild w={4} h={4} mr={1}><Download /></Icon> Download Excel
+                    </Button>
+                  )}
+                </HStack>
               </Flex>
 
               {loadingInterested ? (
@@ -555,6 +1002,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Email</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>Resume Score</Table.ColumnHeader>
                         <Table.ColumnHeader color="gray.300" px={4} py={3}>CGPA</Table.ColumnHeader>
+                        <Table.ColumnHeader color="gray.300" px={4} py={3}>Action</Table.ColumnHeader>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -575,6 +1023,18 @@ export default function TpoDashboard({ token, user, onLogout }) {
                               {s.cgpa}
                             </Badge>
                           </Table.Cell>
+                          <Table.Cell px={4} py={3}>
+                            <Button
+                              size="xs"
+                              colorPalette="purple"
+                              variant="outline"
+                              loading={shortlistingStudentId === s.id}
+                              loadingText="Shortlisting..."
+                              onClick={() => handleShortlistStudent(s.id)}
+                            >
+                              Shortlist
+                            </Button>
+                          </Table.Cell>
                         </Table.Row>
                       ))}
                     </Table.Body>
@@ -592,12 +1052,29 @@ export default function TpoDashboard({ token, user, onLogout }) {
                 <Icon asChild w={4} h={4}><ChevronLeft /></Icon> Back to jobs
               </Button>
               <Flex justify="space-between" align="center" mb={3}>
-                <Heading size="lg" color="gray.100">Auto-Shortlisted Students</Heading>
+                <Box />
                 {shortlisted.length > 0 && (
                   <HStack gap={2}>
-                    <Button size="sm" colorPalette="green" variant="outline" onClick={downloadShortlistedExcel}>
-                      <Icon asChild w={4} h={4} mr={1}><Download /></Icon> Download Excel
-                    </Button>
+                    <MenuRoot>
+                      <MenuTrigger asChild>
+                        <Button size="sm" colorPalette="green" variant="outline" loading={loadingExcel || isPreparingResumes} loadingText={downloadButtonLabel}>
+                          <Icon asChild w={4} h={4} mr={1}><Download /></Icon>
+                          {downloadButtonLabel}
+                          <Icon asChild w={4} h={4} ml={1}><ChevronDown /></Icon>
+                        </Button>
+                      </MenuTrigger>
+                      <MenuContent bg="gray.800" borderColor="gray.700">
+                        <MenuItem value="download-excel" onClick={downloadShortlistedExcel} disabled={loadingExcel || isPreparingResumes}>
+                          {loadingExcel ? 'Preparing Excel...' : 'Download Excel'}
+                        </MenuItem>
+                        <MenuItem value="download-all-resumes" onClick={downloadAllResumes} disabled={loadingExcel || loadingAllResumes || loadingSelectedResumes}>
+                          {loadingAllResumes ? 'Preparing resumes...' : 'Download All Resumes'}
+                        </MenuItem>
+                        <MenuItem value="download-selected-resumes" onClick={downloadSelectedResumes} disabled={loadingExcel || loadingAllResumes || loadingSelectedResumes}>
+                          {loadingSelectedResumes ? 'Preparing resumes...' : 'Download Selected Resumes'}
+                        </MenuItem>
+                      </MenuContent>
+                    </MenuRoot>
                     <Button size="sm" colorPalette="purple" variant="solid" loading={notifying}
                       loadingText="Sending…" onClick={notifyShortlisted}>
                       <Icon asChild w={4} h={4} mr={1}><Bell /></Icon>
@@ -606,6 +1083,7 @@ export default function TpoDashboard({ token, user, onLogout }) {
                   </HStack>
                 )}
               </Flex>
+
               {shortlistedJob && (
                 <Box bg="gray.900" border="1px solid" borderColor="gray.800" borderRadius="xl" p={4} mb={4}>
                   <Heading size="sm" color="gray.100">{shortlistedJob.title} — {shortlistedJob.company}</Heading>
@@ -624,78 +1102,22 @@ export default function TpoDashboard({ token, user, onLogout }) {
               {loadingShortlisted ? (
                 <Flex justify="center" py={8}><Spinner color="purple.400" size="xl" /></Flex>
               ) : shortlisted.length === 0 ? (
-                <Text color="gray.500">No students match the shortlisting criteria.</Text>
+                <Text color="gray.500">No students shortlisted yet.</Text>
               ) : (
-                <VStack gap={3} align="stretch">
-                  {shortlisted.map((item, idx) => (
-                    <Box key={item.student.id} bg={selectedStudents.includes(item.student.id) ? 'purple.500/10' : 'gray.900'} border="1px solid"
-                      borderColor={selectedStudents.includes(item.student.id) ? 'purple.500' : 'gray.800'}
-                      borderRadius="xl" p={5}>
-                      <Flex justify="space-between" align="flex-start" mb={3}>
-                        <Box>
-                          <HStack gap={2} mb={1} align="center">
-                            <Checkbox
-                              checked={selectedStudents.includes(item.student.id)}
-                              onCheckedChange={() => toggleStudentSelection(item.student.id)}
-                            />
-                            <Badge colorPalette="purple" fontSize="xs">#{idx + 1}</Badge>
-                            <Heading size="sm" color="gray.100">{item.student.name}</Heading>
-                          </HStack>
-                          <Text fontSize="xs" color="gray.500">{item.student.email}</Text>
-                        </Box>
-                        <Box textAlign="center" bg="purple.500/15" px={3} py={2} borderRadius="lg">
-                          <Text fontWeight="700" color="purple.300" fontSize="lg">{item.match_score}%</Text>
-                          <Text fontSize="xs" color="gray.400">Match</Text>
-                        </Box>
-                      </Flex>
-                      <Flex flexWrap="wrap" gap={2} mb={2}>
-                        {item.student.cgpa != null && <Badge colorPalette="blue" fontSize="xs">CGPA: {item.student.cgpa}</Badge>}
-                        {item.student.mobile_number && <Badge colorPalette="gray" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><Phone /></Icon>{item.student.mobile_number}</Badge>}
-                        <HStack gap={2}>
-                          <Badge colorPalette="green" fontSize="xs"><Icon asChild w={3} h={3} mr={1}><FileText /></Icon>Resume: {item.student.resume_score}</Badge>
-                          <Button
-                            size="sm"
-                            colorPalette="green"
-                            variant="outline"
-                            loading={loadingResumeId === item.student.id}
-                            loadingText="Opening..."
-                            onClick={() => openResumeViewer(item.student.id, item.student.name)}
-                          >
-                            View Resume
-                          </Button>
-                        </HStack>
-                      </Flex>
-                      {item.matched_skills?.length > 0 && (
-                        <Box mb={2}>
-                          <Text fontSize="xs" color="gray.500" mb={1}>Matched Skills:</Text>
-                          <Flex flexWrap="wrap" gap={1}>
-                            {item.matched_skills.map((s, i) => (
-                              <Badge key={i} colorPalette="green" fontSize="xs" variant="subtle">{s}</Badge>
-                            ))}
-                          </Flex>
-                        </Box>
-                      )}
-                      {item.student.certifications && (
-                        <Box mb={2}>
-                          <Text fontSize="xs" color="gray.500" mb={1}>Certifications:</Text>
-                          <Flex flexWrap="wrap" gap={1}>
-                            {item.student.certifications.split(',').map((c, i) => (
-                              <Badge key={i} fontSize="xs"
-                                colorPalette={item.matched_certifications?.includes(c.trim().toLowerCase()) ? 'green' : 'gray'}
-                              >
-                                {c.trim()}
-                              </Badge>
-                            ))}
-                          </Flex>
-                        </Box>
-                      )}
-                      {item.student.preferred_job_roles && (
-                        <Text fontSize="xs" color="gray.500">
-                          Preferred: <Text as="span" color="gray.300">{item.student.preferred_job_roles}</Text>
-                        </Text>
-                      )}
-                    </Box>
-                  ))}
+                <VStack gap={4} align="stretch">
+                  <Heading size="md" color="gray.100">Auto-Shortlisted Students</Heading>
+                  {autoShortlisted.length > 0 ? (
+                    renderShortlistedCards(autoShortlisted, 0)
+                  ) : (
+                    <Text color="gray.500" fontSize="sm">No auto-shortlisted students for this job.</Text>
+                  )}
+
+                  <Heading size="md" color="gray.100">Interested Shortlisted Students</Heading>
+                  {manualShortlisted.length > 0 ? (
+                    renderShortlistedCards(manualShortlisted, autoShortlisted.length)
+                  ) : (
+                    <Text color="gray.500" fontSize="sm">No manually shortlisted students from Interested yet.</Text>
+                  )}
                 </VStack>
               )}
             </Box>
@@ -706,10 +1128,21 @@ export default function TpoDashboard({ token, user, onLogout }) {
               <DialogHeader>
                 <HStack w="full" justify="space-between" align="center" pr={8}>
                   <DialogTitle color="gray.100">{resumeViewerStudent} Resume</DialogTitle>
-                  <Button size="sm" colorPalette="green" variant="outline" onClick={downloadViewedResume}>
-                    <Icon asChild w={4} h={4} mr={1}><Download /></Icon>
-                    Download Resume
-                  </Button>
+                  <HStack gap={2}>
+                    <Button
+                      size="sm"
+                      colorPalette="blue"
+                      variant="outline"
+                      onClick={() => window.open(resumeViewerUrl, '_blank', 'noopener,noreferrer')}
+                      disabled={!resumeViewerUrl}
+                    >
+                      Open in New Tab
+                    </Button>
+                    <Button size="sm" colorPalette="green" variant="outline" onClick={downloadViewedResume}>
+                      <Icon asChild w={4} h={4} mr={1}><Download /></Icon>
+                      Download Resume
+                    </Button>
+                  </HStack>
                 </HStack>
               </DialogHeader>
               <DialogCloseTrigger />
@@ -730,6 +1163,17 @@ export default function TpoDashboard({ token, user, onLogout }) {
               </DialogBody>
             </DialogContent>
           </DialogRoot>
+
+          <ConfirmationModal
+            isOpen={showDeleteModal}
+            title="Delete Job Posting"
+            message="Are you sure you want to delete this job?"
+            onConfirm={confirmDeleteJob}
+            onCancel={cancelDeleteJob}
+            confirmLabel="Delete"
+            cancelLabel="Cancel"
+            isLoading={deletingJob}
+          />
         </Box>
       </Flex>
     </Flex>

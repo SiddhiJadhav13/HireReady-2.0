@@ -24,9 +24,11 @@ const normalizeEmailPrefix = (value) => value.replace(/\s+/g, '').split('@')[0];
 
 export default function TpoLoginPage({ onLogin, onBack }) {
   const [mode, setMode] = useState('login');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -41,10 +43,17 @@ export default function TpoLoginPage({ onLogin, onBack }) {
     setError('');
     const emailPrefix = normalizeEmailPrefix(email);
     if (!emailPrefix || !password.trim()) { setError('Please fill in all fields.'); return; }
-    if (mode === 'register' && !name.trim()) { setError('Please enter your name.'); return; }
+    if (mode === 'register' && (!firstName.trim() || !lastName.trim())) {
+      setError('Please enter first name and last name.');
+      return;
+    }
     if (email.includes('@')) { setError('Enter only the email prefix before @apsit.edu.in.'); return; }
 
     if (mode === 'register') {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
       const failedRules = PASSWORD_RULES.filter(r => !r.test(password));
       if (failedRules.length > 0) {
         setError('Password must contain: ' + failedRules.map(r => r.label).join(', '));
@@ -61,7 +70,14 @@ export default function TpoLoginPage({ onLogin, onBack }) {
       const fullEmail = `${emailPrefix}${EMAIL_DOMAIN}`;
       const body = mode === 'login'
         ? { email: fullEmail, password }
-        : { name: name.trim(), email: fullEmail, password, role: 'tpo' };
+        : {
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          name: `${firstName.trim()} ${lastName.trim()}`.trim(),
+          email: fullEmail,
+          password,
+          role: 'tpo',
+        };
 
       const resp = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
@@ -266,9 +282,15 @@ export default function TpoLoginPage({ onLogin, onBack }) {
             <form onSubmit={handleSubmit}>
               <VStack gap={4} align="stretch">
                 {mode === 'register' && (
-                  <Field label="Full Name">
-                    <Input placeholder="e.g. Dr. Sharma" value={name}
-                      onChange={(e) => setName(e.target.value)} {...inputStyles} />
+                  <Field label="First Name">
+                    <Input placeholder="Enter your first name" value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)} {...inputStyles} />
+                  </Field>
+                )}
+                {mode === 'register' && (
+                  <Field label="Last Name">
+                    <Input placeholder="Enter your last name" value={lastName}
+                      onChange={(e) => setLastName(e.target.value)} {...inputStyles} />
                   </Field>
                 )}
                 <Field label="Email">
@@ -282,6 +304,12 @@ export default function TpoLoginPage({ onLogin, onBack }) {
                   <PasswordInput placeholder="••••••••" value={password}
                     onChange={(e) => setPassword(e.target.value)} {...inputStyles} />
                 </Field>
+                {mode === 'register' && (
+                  <Field label="Confirm Password">
+                    <PasswordInput placeholder="••••••••" value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)} {...inputStyles} />
+                  </Field>
+                )}
 
 
                 <Button

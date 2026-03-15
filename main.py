@@ -24,13 +24,16 @@ from groq import Groq
 from PyPDF2 import PdfReader
 from sqlalchemy.orm.session import Session
 from sqlalchemy import text
+from sqlalchemy import or_
 from typing import Optional, List
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urlparse
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from services.role_engine import rank_roles
 from services.feature_analyzer import build_complete_feature_vector
 from services.database import engine, get_db, Base
-from services.models import User, AnalysisResult, QuizResult, Job, TpoLogin, InterestedJob, Notification
+from services.models import User, AnalysisResult, QuizResult, Job, TpoLogin, InterestedJob, ShortlistedJob, Notification
 from services.quiz_generator import generate_quiz_questions
 from services.auth import (
     hash_password,
@@ -64,9 +67,17 @@ def ensure_db_schema_compatibility() -> None:
                 'ALTER TABLE "TPO_login" ADD COLUMN IF NOT EXISTS password_reset_expires TIMESTAMP WITH TIME ZONE'
             )
         )
+        conn.execute(
+            text("ALTER TABLE \"TPO_login\" ADD COLUMN IF NOT EXISTS first_name VARCHAR(100) DEFAULT ''")
+        )
+        conn.execute(
+            text("ALTER TABLE \"TPO_login\" ADD COLUMN IF NOT EXISTS last_name VARCHAR(100) DEFAULT ''")
+        )
 
         # Users table profile and password-reset columns added over time.
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS moodle_id VARCHAR(8)'))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name VARCHAR(100) DEFAULT ''"))
+        conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name VARCHAR(100) DEFAULT ''"))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS year VARCHAR(4)'))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS division VARCHAR(1)'))
         conn.execute(text('ALTER TABLE users ADD COLUMN IF NOT EXISTS semester INTEGER'))
@@ -91,11 +102,19 @@ def ensure_db_schema_compatibility() -> None:
         # Jobs table columns introduced for richer posting details.
         conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS job_role VARCHAR(255) DEFAULT ''"))
         conn.execute(text('ALTER TABLE jobs ADD COLUMN IF NOT EXISTS min_cgpa DOUBLE PRECISION'))
+        conn.execute(text('ALTER TABLE jobs ADD COLUMN IF NOT EXISTS min_resume_score DOUBLE PRECISION'))
         conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS required_certifications TEXT DEFAULT ''"))
         conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS preferred_skills TEXT DEFAULT ''"))
         conn.execute(text('ALTER TABLE jobs ADD COLUMN IF NOT EXISTS package_lpa DOUBLE PRECISION'))
+        conn.execute(text('ALTER TABLE jobs ADD COLUMN IF NOT EXISTS salary DOUBLE PRECISION'))
         conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS deadline VARCHAR(100) DEFAULT ''"))
         conn.execute(text("ALTER TABLE jobs ADD COLUMN IF NOT EXISTS company_logo TEXT DEFAULT ''"))
+        conn.execute(text('UPDATE jobs SET package_lpa = salary WHERE package_lpa IS NULL AND salary IS NOT NULL'))
+        conn.execute(text('UPDATE jobs SET salary = package_lpa WHERE salary IS NULL AND package_lpa IS NOT NULL'))
+
+        # Shortlisted mapping table metadata.
+        conn.execute(text("ALTER TABLE shortlisted_jobs ADD COLUMN IF NOT EXISTS source VARCHAR(20) DEFAULT 'manual'"))
+        conn.execute(text("UPDATE shortlisted_jobs SET source = 'manual' WHERE source IS NULL"))
 
 
 ensure_db_schema_compatibility()
@@ -196,7 +215,9 @@ def ping():
 # ═══════════════════════════════════════════════════════════════════════════════
 
 class RegisterRequest(BaseModel):
-    name: str
+    name: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     email: EmailStr
     password: str
     role: str = "student"  # "student" or "tpo"
@@ -221,6 +242,21 @@ class NotifyShortlistedRequest(BaseModel):
     job_id: Optional[str] = None
 
 
+class DownloadSelectedResumesRequest(BaseModel):
+    student_ids: List[str] = []
+    job_id: Optional[str] = None
+
+
+class ShortlistStudentRequest(BaseModel):
+    job_id: str
+    student_id: str
+
+
+class ShortlistAllRequest(BaseModel):
+    job_id: str
+    student_ids: List[str] = []
+
+
 @app.post("/api/auth/register")
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
     """Create a new account. Students → users table, TPOs → TPO_login table."""
@@ -228,6 +264,12 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
     role = data.role.strip().lower()
     if role not in ("student", "tpo"):
         raise HTTPException(status_code=400, detail="Role must be 'student' or 'tpo'.")
+
+    first_name = (data.first_name or "").strip()
+    last_name = (data.last_name or "").strip()
+    full_name = (data.name or f"{first_name} {last_name}").strip()
+    if not full_name:
+        raise HTTPException(status_code=400, detail="Name is required.")
 
     # ── TPO Registration → TPO_login table ────────────────────────────────
     if role == "tpo":
@@ -240,6 +282,8 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
 
         tpo = TpoLogin(
             email=email,
+            first_name=first_name,
+            last_name=last_name,
             password=hash_password(data.password),
         )
         db.add(tpo)
@@ -253,7 +297,9 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
             "token": token,
             "user": {
                 "id": tpo_uuid,
-                "name": data.name.strip(),
+                "name": full_name,
+                "first_name": first_name,
+                "last_name": last_name,
                 "email": tpo.email,
                 "role": "tpo",
             },
@@ -268,7 +314,9 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
         )
 
     user = User(
-        name=data.name.strip(),
+        name=full_name,
+        first_name=first_name,
+        last_name=last_name,
         email=email,
         password_hash=hash_password(data.password),
         role="student",
@@ -284,6 +332,8 @@ def register(data: RegisterRequest, db: Session = Depends(get_db)):
         "user": {
             "id": str(user.id),
             "name": user.name,
+            "first_name": user.first_name or "",
+            "last_name": user.last_name or "",
             "email": user.email,
             "role": user.role,
             "github_username": user.github_username or "",
@@ -317,7 +367,9 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
             "token": token,
             "user": {
                 "id": tpo_uuid,
-                "name": tpo.email,
+                "name": ((f"{(tpo.first_name or '').strip()} {(tpo.last_name or '').strip()}").strip() or tpo.email),
+                "first_name": tpo.first_name or "",
+                "last_name": tpo.last_name or "",
                 "email": tpo.email,
                 "role": "tpo",
             },
@@ -339,6 +391,8 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         "user": {
             "id": str(user.id),
             "name": user.name,
+            "first_name": user.first_name or "",
+            "last_name": user.last_name or "",
             "email": user.email,
             "role": user.role,
             "github_username": user.github_username or "",
@@ -1076,6 +1130,16 @@ async def analyze_full_profile(
                 page_text = page.extract_text()
                 if page_text:
                     resume_text += page_text + "\n"
+
+            # Persist uploaded file so TPO resume viewer can open it later.
+            safe_suffix = Path(resume_filename).name.replace(" ", "_")
+            stored_name = f"{current_user.id}_{int(datetime.now(timezone.utc).timestamp())}_{safe_suffix}"
+            stored_path = RESUMES_DIR / stored_name
+            stored_path.write_bytes(contents)
+
+            current_user.resume_filename = resume_filename
+            current_user.resume_url = f"/uploads/resumes/{stored_name}"
+            current_user.resume_text = resume_text
         except Exception as exc:
             logger.error("Failed to parse uploaded PDF: %s", exc)
     elif current_user.resume_text:
@@ -1139,9 +1203,12 @@ async def analyze_full_profile(
             current_user.github_username = github_username.strip()
         if leetcode_username.strip() and not current_user.leetcode_username:
             current_user.leetcode_username = leetcode_username.strip()
-        if resume_text and resume_filename:
+        if resume_text and resume_filename and not current_user.resume_filename:
             current_user.resume_text = resume_text
             current_user.resume_filename = resume_filename
+
+        # Keep the canonical resume score on users table for all dashboards/APIs.
+        current_user.resume_score = readiness
 
         db.commit()
         logger.info("Saved analysis result %s for user %s", analysis.id, current_user.id)
@@ -1366,6 +1433,7 @@ async def create_job(
     eligibility: str = Form(""),
     job_role: str = Form(""),
     min_cgpa: Optional[float] = Form(None),
+    min_resume_score: Optional[float] = Form(None),
     required_certifications: str = Form(""),
     preferred_skills: str = Form(""),
     package_lpa: Optional[float] = Form(None),
@@ -1385,6 +1453,10 @@ async def create_job(
         mime = "image/png" if ext == ".png" else "image/jpeg"
         logo_data = f"data:{mime};base64,{base64.b64encode(raw).decode()}"
 
+    normalized_min_resume_score = None
+    if min_resume_score is not None:
+        normalized_min_resume_score = max(0.0, min(100.0, float(min_resume_score)))
+
     job = Job(
         posted_by=tpo.id,
         title=title,
@@ -1393,6 +1465,7 @@ async def create_job(
         eligibility=eligibility,
         job_role=job_role,
         min_cgpa=min_cgpa,
+        min_resume_score=normalized_min_resume_score,
         required_certifications=required_certifications,
         preferred_skills=preferred_skills,
         package_lpa=package_lpa,
@@ -1410,6 +1483,7 @@ async def create_job(
         "eligibility": job.eligibility,
         "job_role": job.job_role,
         "min_cgpa": job.min_cgpa,
+        "min_resume_score": job.min_resume_score,
         "required_certifications": job.required_certifications,
         "preferred_skills": job.preferred_skills,
         "package_lpa": job.package_lpa,
@@ -1441,6 +1515,7 @@ def list_tpo_jobs(
                 "eligibility": j.eligibility,
                 "job_role": j.job_role or "",
                 "min_cgpa": j.min_cgpa,
+                "min_resume_score": j.min_resume_score,
                 "required_certifications": j.required_certifications or "",
                 "preferred_skills": j.preferred_skills or "",
                 "package_lpa": j.package_lpa,
@@ -1475,21 +1550,13 @@ def get_shortlisted_students(
     db: Session = Depends(get_db),
 ):
     """
-    Auto-shortlist students for a job based on CGPA, certifications,
-    resume_score, and preferred_skills match.
-    
-    Filters:
-      - cgpa >= job.min_cgpa
-      - All required_certifications matched
-      - resume_score >= 60
-      
-    Score = (skill_match + cgpa_score + resume_score/100) / 3
+    Return auto-shortlisted and manually-shortlisted students for this job.
+    Both sections are sourced from shortlisted_jobs using the `source` column.
     """
     job = db.query(Job).filter(Job.id == job_id, Job.posted_by == tpo.id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
 
-    # Parse required certifications (lowercased, trimmed)
     req_certs = [
         c.strip().lower()
         for c in (job.required_certifications or "").split(",")
@@ -1503,36 +1570,34 @@ def get_shortlisted_students(
         if s.strip()
     ]
 
-    # Fetch all students
+    existing_shortlists = (
+        db.query(ShortlistedJob)
+        .filter(ShortlistedJob.job_id == job_id)
+        .all()
+    )
+    existing_by_student = {str(row.student_id): row for row in existing_shortlists}
+
     students = db.query(User).filter(User.role == "student").all()
 
-    shortlisted = []
-    for s in students:
-        # --- CGPA filter ---
-        if job.min_cgpa is not None and job.min_cgpa > 0:
-            if s.cgpa is None or s.cgpa < job.min_cgpa:
-                continue
+    def normalize_resume_url_for_response(raw_url: Optional[str]) -> str:
+        """Return a stable resume URL for API consumers while preserving DB-backed value semantics."""
+        url = (raw_url or "").strip()
+        if not url:
+            return ""
 
-        # --- Certification filter ---
-        student_certs = [
-            c.strip().lower()
-            for c in (s.certifications or "").split(",")
-            if c.strip()
-        ]
-        if req_certs:
-            matched_certs = [rc for rc in req_certs if rc in student_certs]
-            if len(matched_certs) < len(req_certs):
-                continue  # student missing required certs
-        else:
-            matched_certs = []
+        # Keep local uploaded-file paths relative so frontend proxy/current host can serve them.
+        if url.startswith("http://") or url.startswith("https://"):
+            parsed = urlparse(url)
+            if parsed.path.startswith("/uploads/") and parsed.hostname in {"localhost", "127.0.0.1"}:
+                return parsed.path
+            return url
 
-        # --- Resume score filter (>= 50) ---
+        return url if url.startswith("/") else f"/{url}"
+
+    def build_shortlist_item(s: User, source: str) -> dict:
         resume_sc = s.resume_score or 0
-        if resume_sc < 50:
-            continue
 
-        # --- Skill match ---
-        # Check student's resume_text + certifications + preferred_job_roles for skills
+        # Compute informational match details for display.
         student_text = " ".join([
             (s.resume_text or "").lower(),
             (s.certifications or "").lower(),
@@ -1543,32 +1608,121 @@ def get_shortlisted_students(
             skill_match = len(matched_skills) / len(pref_skills)
         else:
             matched_skills = []
-            skill_match = 1.0  # no skills required = full match
+            skill_match = 1.0
 
-        # --- Calculate match score ---
+        student_certs = [
+            c.strip().lower()
+            for c in (s.certifications or "").split(",")
+            if c.strip()
+        ]
+        matched_certs = [rc for rc in req_certs if rc in student_certs] if req_certs else []
+
         cgpa_score = min((s.cgpa or 0) / 10.0, 1.0)
         match_score = round(((skill_match + cgpa_score + resume_sc / 100) / 3) * 100, 2)
 
-        shortlisted.append({
-            "student": {
-                "id": str(s.id),
-                "name": s.name,
-                "email": s.email,
-                "mobile_number": s.mobile_number or "",
-                "cgpa": s.cgpa,
-                "certifications": s.certifications or "",
-                "preferred_job_roles": s.preferred_job_roles or "",
-                "resume_text": s.resume_text or "",
-                "resume_score": resume_sc,
-                "resume_url": s.resume_url or "",
-            },
+        normalized_resume_url = normalize_resume_url_for_response(s.resume_url)
+        student_payload = {
+            "id": str(s.id),
+            "name": s.name,
+            "email": s.email,
+            "mobile_number": s.mobile_number or "",
+            "cgpa": s.cgpa,
+            "certifications": s.certifications or "",
+            "preferred_job_roles": s.preferred_job_roles or "",
+            "resume_text": s.resume_text or "",
+            "resume_score": resume_sc,
+            "resume_url": normalized_resume_url,
+        }
+
+        return {
+            "student": student_payload,
+            "id": student_payload["id"],
+            "name": student_payload["name"],
+            "email": student_payload["email"],
+            "cgpa": student_payload["cgpa"],
+            "resume_score": student_payload["resume_score"],
+            "resume_url": student_payload["resume_url"],
             "match_score": match_score,
             "matched_skills": matched_skills,
             "matched_certifications": matched_certs,
-        })
+            "source": source,
+        }
 
-    # Sort by match_score descending
-    shortlisted.sort(key=lambda x: x["match_score"], reverse=True)
+    required_min_resume = max(0.0, min(100.0, float(job.min_resume_score or 0)))
+    eligible_auto_ids = set()
+    for s in students:
+        sid = str(s.id)
+        # Manual rows should remain manual and never be overwritten to auto.
+        if sid in existing_by_student and (existing_by_student[sid].source or "manual") == "manual":
+            continue
+
+        if job.min_cgpa is not None and job.min_cgpa > 0:
+            if s.cgpa is None or s.cgpa < job.min_cgpa:
+                continue
+
+        resume_sc = s.resume_score or 0
+        if resume_sc < required_min_resume:
+            continue
+
+        eligible_auto_ids.add(sid)
+
+    # Sync auto rows in shortlisted_jobs so source-based queries are accurate.
+    existing_auto_ids = {
+        sid
+        for sid, row in existing_by_student.items()
+        if (row.source or "manual") == "auto"
+    }
+
+    auto_ids_to_add = eligible_auto_ids - set(existing_by_student.keys())
+    for sid in auto_ids_to_add:
+        db.add(ShortlistedJob(job_id=job_id, student_id=sid, source="auto"))
+
+    auto_ids_to_remove = existing_auto_ids - eligible_auto_ids
+    if auto_ids_to_remove:
+        db.query(ShortlistedJob).filter(
+            ShortlistedJob.job_id == job_id,
+            ShortlistedJob.source == "auto",
+            ShortlistedJob.student_id.in_(list(auto_ids_to_remove)),
+        ).delete(synchronize_session=False)
+
+    if auto_ids_to_add or auto_ids_to_remove:
+        db.commit()
+
+    auto_shortlisted_pairs = (
+        db.query(ShortlistedJob, User)
+        .join(User, User.id == ShortlistedJob.student_id)
+        .filter(ShortlistedJob.job_id == job_id, ShortlistedJob.source == "auto")
+        .order_by(ShortlistedJob.created_at.desc())
+        .all()
+    )
+    manual_shortlisted_pairs = (
+        db.query(ShortlistedJob, User)
+        .join(User, User.id == ShortlistedJob.student_id)
+        .filter(
+            ShortlistedJob.job_id == job_id,
+            or_(
+                ShortlistedJob.source == "manual",
+                ShortlistedJob.source.is_(None),
+                ShortlistedJob.source == "",
+            ),
+        )
+        .order_by(ShortlistedJob.created_at.desc())
+        .all()
+    )
+
+    auto_shortlisted = [
+        build_shortlist_item(user, source="auto")
+        for _, user in auto_shortlisted_pairs
+    ]
+    auto_shortlisted_ids = {item["id"] for item in auto_shortlisted}
+    manual_shortlisted = [
+        build_shortlist_item(user, source="manual")
+        for _, user in manual_shortlisted_pairs
+        if str(user.id) not in auto_shortlisted_ids
+    ]
+
+    auto_shortlisted.sort(key=lambda x: x["match_score"], reverse=True)
+    shortlisted = auto_shortlisted + manual_shortlisted
 
     return {
         "job": {
@@ -1576,13 +1730,260 @@ def get_shortlisted_students(
             "title": job.title,
             "company": job.company,
             "min_cgpa": job.min_cgpa,
+            "min_resume_score": job.min_resume_score,
             "required_certifications": job.required_certifications or "",
             "preferred_skills": job.preferred_skills or "",
             "job_role": job.job_role or "",
         },
+        "auto_shortlisted_students": auto_shortlisted,
+        "manual_shortlisted_students": manual_shortlisted,
         "shortlisted_students": shortlisted,
         "total": len(shortlisted),
     }
+
+
+@app.post("/api/jobs/shortlist-student")
+def shortlist_student(
+    payload: ShortlistStudentRequest,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Shortlist one student for a job and remove them from interested list."""
+    job = db.query(Job).filter(Job.id == payload.job_id, Job.posted_by == tpo.id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    student = db.query(User).filter(User.id == payload.student_id, User.role == "student").first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    existing_shortlist = db.query(ShortlistedJob).filter(
+        ShortlistedJob.job_id == payload.job_id,
+        ShortlistedJob.student_id == payload.student_id,
+    ).first()
+    if existing_shortlist:
+        return {
+            "message": "Student already shortlisted",
+            "job_id": payload.job_id,
+            "student_id": payload.student_id,
+            "already_shortlisted": True,
+        }
+
+    db.add(ShortlistedJob(job_id=payload.job_id, student_id=payload.student_id, source="manual"))
+
+    existing_interest = db.query(InterestedJob).filter(
+        InterestedJob.job_id == payload.job_id,
+        InterestedJob.student_id == payload.student_id,
+    ).first()
+    if existing_interest:
+        db.delete(existing_interest)
+
+    db.commit()
+    return {"message": "Student shortlisted", "job_id": payload.job_id, "student_id": payload.student_id}
+
+
+@app.post("/api/jobs/shortlist-all")
+def shortlist_all_students(
+    payload: ShortlistAllRequest,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Shortlist selected students for a job and remove them from interested list."""
+    job = db.query(Job).filter(Job.id == payload.job_id, Job.posted_by == tpo.id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    student_ids = [sid for sid in payload.student_ids if sid]
+    if not student_ids:
+        raise HTTPException(status_code=400, detail="student_ids is required")
+
+    valid_students = db.query(User.id).filter(User.id.in_(student_ids), User.role == "student").all()
+    valid_ids = {str(row.id) for row in valid_students}
+    if not valid_ids:
+        raise HTTPException(status_code=400, detail="No valid students provided")
+
+    existing_shortlisted_rows = {
+        str(row.student_id): row
+        for row in db.query(ShortlistedJob).filter(
+            ShortlistedJob.job_id == payload.job_id,
+            ShortlistedJob.student_id.in_(list(valid_ids)),
+        ).all()
+    }
+
+    inserted_ids: List[str] = []
+    skipped_ids: List[str] = []
+    for sid in valid_ids:
+        existing_row = existing_shortlisted_rows.get(sid)
+        if not existing_row:
+            db.add(ShortlistedJob(job_id=payload.job_id, student_id=sid, source="manual"))
+            inserted_ids.append(sid)
+        else:
+            skipped_ids.append(sid)
+
+    db.query(InterestedJob).filter(
+        InterestedJob.job_id == payload.job_id,
+        InterestedJob.student_id.in_(inserted_ids),
+    ).delete(synchronize_session=False)
+
+    db.commit()
+    if inserted_ids:
+        message = "Students shortlisted"
+    else:
+        message = "All selected students are already shortlisted"
+
+    return {
+        "message": message,
+        "job_id": payload.job_id,
+        "student_ids": inserted_ids,
+        "already_shortlisted_ids": skipped_ids,
+    }
+
+
+def _build_resumes_zip(students: List[dict], archive_name: str) -> StreamingResponse:
+    """Create an in-memory zip for student resumes and return as download response."""
+    if not students:
+        raise HTTPException(status_code=404, detail="No students found")
+
+    zip_buffer = io.BytesIO()
+    added_files = 0
+    with ZipFile(zip_buffer, mode="w", compression=ZIP_DEFLATED) as zip_file:
+        for s in students:
+            resume_url = (s.get("resume_url") or "").strip()
+            if not resume_url:
+                continue
+            relative_resume_path = resume_url.lstrip("/")
+            resume_path = BASE_DIR / relative_resume_path
+            if not resume_path.exists() or not resume_path.is_file():
+                continue
+
+            student_name = (s.get("name") or "student").strip()
+            safe_student_name = re.sub(r"[^a-zA-Z0-9_-]+", "_", student_name).strip("_") or "student"
+            extension = resume_path.suffix or ".pdf"
+            arcname = f"{safe_student_name}_{s.get('id', '')}{extension}"
+            zip_file.write(resume_path, arcname=arcname)
+            added_files += 1
+
+    if added_files == 0:
+        raise HTTPException(status_code=404, detail="No resume files found for the selected students")
+
+    zip_buffer.seek(0)
+    headers = {"Content-Disposition": f'attachment; filename="{archive_name}"'}
+    return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+
+
+@app.get("/api/resumes/download-all")
+def download_all_shortlisted_resumes(
+    job_id: str,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Download all resumes from shortlisted students of the selected job as a ZIP."""
+    shortlisted_data = get_shortlisted_students(job_id=job_id, tpo=tpo, db=db)
+    shortlisted_students = [item.get("student", {}) for item in shortlisted_data.get("shortlisted_students", [])]
+    return _build_resumes_zip(shortlisted_students, archive_name="shortlisted_all_resumes.zip")
+
+
+@app.post("/api/resumes/download-selected")
+def download_selected_shortlisted_resumes(
+    payload: DownloadSelectedResumesRequest,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Download selected students' resumes as ZIP, optionally restricted to shortlisted students for a job."""
+    selected_ids = [str(sid) for sid in (payload.student_ids or []) if str(sid).strip()]
+    if not selected_ids:
+        raise HTTPException(status_code=400, detail="student_ids is required")
+
+    selected_set = set(selected_ids)
+    students: List[dict] = []
+
+    if payload.job_id:
+        shortlisted_data = get_shortlisted_students(job_id=payload.job_id, tpo=tpo, db=db)
+        shortlisted_students = [item.get("student", {}) for item in shortlisted_data.get("shortlisted_students", [])]
+        students = [s for s in shortlisted_students if str(s.get("id")) in selected_set]
+    else:
+        db_students = (
+            db.query(User)
+            .filter(User.id.in_(selected_ids), User.role == "student")
+            .all()
+        )
+        students = [
+            {
+                "id": str(s.id),
+                "name": s.name,
+                "resume_url": s.resume_url or "",
+            }
+            for s in db_students
+        ]
+
+    return _build_resumes_zip(students, archive_name="shortlisted_selected_resumes.zip")
+
+
+@app.get("/api/tpo/jobs/{job_id}/shortlisted/export")
+def export_shortlisted_students(
+    job_id: str,
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Export shortlisted students as Excel with job details and student details."""
+    from openpyxl import Workbook
+
+    job = db.query(Job).filter(Job.id == job_id, Job.posted_by == tpo.id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    shortlisted_data = get_shortlisted_students(job_id=job_id, tpo=tpo, db=db)
+    shortlisted_students = shortlisted_data.get("shortlisted_students", [])
+    lpa_value = job.package_lpa
+    if lpa_value is None:
+        lpa_value = db.execute(
+            text("SELECT salary FROM jobs WHERE id = :job_id"),
+            {"job_id": job_id},
+        ).scalar()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Shortlisted Students"
+
+    headers = [
+        "Job Title",
+        "Company",
+        "Student Name",
+        "Email",
+        "Phone",
+        "CGPA",
+        "Resume Score",
+        "Match Percentage",
+        "Certifications",
+        "Preferred Role",
+    ]
+    ws.append(headers)
+
+    for item in shortlisted_students:
+        student = item.get("student", {})
+        ws.append([
+            job.title,
+            job.company,
+            student.get("name", ""),
+            student.get("email", ""),
+            student.get("mobile_number", ""),
+            student.get("cgpa", ""),
+            student.get("resume_score", ""),
+            item.get("match_score", ""),
+            student.get("certifications", ""),
+            student.get("preferred_job_roles", ""),
+        ])
+
+    buf = io.BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+
+    filename = f"shortlisted_students_{job.company}_{job.title}.xlsx".replace(" ", "_")
+    return StreamingResponse(
+        buf,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @app.get("/api/students/{student_id}/resume")
@@ -1635,6 +2036,7 @@ def list_all_jobs(
                 "eligibility": j.eligibility,
                 "job_role": j.job_role or "",
                 "min_cgpa": j.min_cgpa,
+                "min_resume_score": j.min_resume_score,
                 "required_certifications": j.required_certifications or "",
                 "preferred_skills": j.preferred_skills or "",
                 "package_lpa": j.package_lpa,

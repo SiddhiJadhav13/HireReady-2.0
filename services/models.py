@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import Column, String, Float, Text, DateTime, ForeignKey, JSON, Integer, UniqueConstraint
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
 
 from services.database import Base
 
@@ -24,6 +25,8 @@ class User(Base):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(255), nullable=False)
+    first_name = Column(String(100), default="")
+    last_name = Column(String(100), default="")
     email = Column(String(255), unique=True, nullable=False, index=True)
     password_hash = Column(Text, nullable=False)
     role = Column(String(20), nullable=False, default="student")  # "student" | "tpo"
@@ -144,6 +147,7 @@ class Job(Base):
     eligibility = Column(Text, default="")
     job_role = Column(String(255), default="")             # target role
     min_cgpa = Column(Float, nullable=True)                # minimum CGPA filter
+    min_resume_score = Column(Float, nullable=True)        # minimum resume score filter (max assumed 100)
     required_certifications = Column(Text, default="")     # comma-separated
     preferred_skills = Column(Text, default="")             # comma-separated skills
     package_lpa = Column(Float, nullable=True)                # package per annum in LPA
@@ -156,6 +160,7 @@ class Job(Base):
 
     # Relationships
     interested_students = relationship("InterestedJob", back_populates="job", cascade="all, delete-orphan")
+    shortlisted_students = relationship("ShortlistedJob", back_populates="job", cascade="all, delete-orphan")
 
 
 class TpoLogin(Base):
@@ -163,6 +168,8 @@ class TpoLogin(Base):
     __tablename__ = "TPO_login"
 
     email = Column(String(255), primary_key=True)
+    first_name = Column(String(100), default="")
+    last_name = Column(String(100), default="")
     password = Column(Text, nullable=False)
     # Password reset
     password_reset_token = Column(String(100), nullable=True)
@@ -198,6 +205,37 @@ class InterestedJob(Base):
     # Relationships
     student = relationship("User", back_populates="interested_jobs")
     job = relationship("Job", back_populates="interested_students")
+
+
+class ShortlistedJob(Base):
+    """Student ↔ Job shortlist mapping managed by TPO actions."""
+    __tablename__ = "shortlisted_jobs"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    student_id = Column(
+        UUID(as_uuid=False),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    job_id = Column(
+        UUID(as_uuid=False),
+        ForeignKey("jobs.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+    )
+    source = Column(String(20), nullable=False, default="manual")
+
+    __table_args__ = (
+        UniqueConstraint("student_id", "job_id", name="uq_student_job_shortlist"),
+    )
+
+    student = relationship("User")
+    job = relationship("Job", back_populates="shortlisted_students")
 
 
 class Notification(Base):

@@ -2,6 +2,7 @@
 
 import os
 import uuid as _uuid
+import logging
 from datetime import datetime, timedelta, timezone
 
 from dotenv import load_dotenv
@@ -15,6 +16,7 @@ from services.database import get_db
 from services.models import User, TpoLogin
 
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 JWT_SECRET = os.getenv("JWT_SECRET", "fallback-secret-change-me")
@@ -30,7 +32,14 @@ def hash_password(plain: str) -> str:
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    # Legacy/malformed stored values should not crash auth flow.
+    if not hashed:
+        return False
+    try:
+        return pwd_context.verify(plain, hashed)
+    except Exception:
+        logger.warning("Password verification failed due to invalid stored hash format")
+        return False
 
 
 # ── JWT helpers ───────────────────────────────────────────────────────────────
