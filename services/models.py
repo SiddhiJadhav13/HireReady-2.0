@@ -259,3 +259,27 @@ class Notification(Base):
 
     # Relationships
     student = relationship("User", back_populates="notifications")
+
+
+class JobResult(Base):
+    """Round-wise result uploads by TPO for a job."""
+    __tablename__ = "job_results"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    job_id = Column(
+        UUID(as_uuid=False),
+        ForeignKey("jobs.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    round_name = Column(String(100), nullable=False)
+    result_status = Column(String(20), nullable=False, default="Qualified")
+    remarks = Column(Text, default="")
+    students = Column(JSON, nullable=False, default=list)
+    file_url = Column(Text, default="")
+    created_at = Column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    job = relationship("Job")

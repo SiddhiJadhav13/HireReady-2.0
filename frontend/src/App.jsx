@@ -10,7 +10,7 @@ import {
 import { Tooltip } from '@/components/ui/tooltip';
 import {
   LayoutDashboard, FileText, Map, ClipboardList, Briefcase,
-  User, PanelLeftClose, PanelLeftOpen, LogOut, ChevronLeft, Bell,
+  User, PanelLeftClose, PanelLeftOpen, LogOut, ChevronLeft, Bell, BadgeCheck,
 } from 'lucide-react';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -21,6 +21,7 @@ import ProfilePage from './pages/ProfilePage';
 import ResultCard from './components/ResultCard';
 import QuizPage from './pages/QuizPage';
 import StudentJobs from './pages/StudentJobs';
+import StudentResults from './pages/StudentResults';
 import ResumeAnalysisPage from './pages/ResumeAnalysisPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 
@@ -35,12 +36,27 @@ const NAV_ITEMS = [
   { key: 'roadmap', label: 'Roadmap', icon: Map },
   { key: 'quiz', label: 'Take Quizzes', icon: ClipboardList },
   { key: 'jobs', label: 'Jobs', icon: Briefcase },
+  { key: 'results', label: 'Results', icon: BadgeCheck },
   { key: 'profile', label: 'Profile', icon: User },
 ];
 
+const TAB_TO_PATH = {
+  dashboard: '/student/dashboard',
+  resume: '/student/resume',
+  roadmap: '/student/roadmap',
+  quiz: '/student/quiz',
+  jobs: '/student/jobs',
+  results: '/student/results',
+  profile: '/student/profile',
+};
+
+const PATH_TO_TAB = Object.fromEntries(
+  Object.entries(TAB_TO_PATH).map(([tab, path]) => [path, tab]),
+);
+
 export default function App() {
   /* ── Tab state ───────────────────────────────────────────────────── */
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(() => PATH_TO_TAB[window.location.pathname] || 'dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   /* ── Role selection (landing page) ──────────────────────────────── */
@@ -177,6 +193,26 @@ export default function App() {
     if (newAnalysis) setResult(newAnalysis);
   };
 
+  const changeStudentTab = (tab) => {
+    setActiveTab(tab);
+    const targetPath = TAB_TO_PATH[tab] || '/student/dashboard';
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState({}, '', targetPath);
+    }
+  };
+
+  useEffect(() => {
+    const onPopState = () => {
+      const mapped = PATH_TO_TAB[window.location.pathname];
+      if (mapped) {
+        setActiveTab(mapped);
+      }
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   /* ── Helpers ────────────────────────────────────────────────────── */
   const categoryColor = (cat) => {
     if (!cat) return 'green';
@@ -260,7 +296,7 @@ export default function App() {
                 borderRadius="lg"
                 fontSize="sm"
                 fontWeight={isActive ? '600' : '400'}
-                onClick={() => setActiveTab(item.key)}
+                onClick={() => changeStudentTab(item.key)}
               >
                 <Icon asChild w={5} h={5} mr={sidebarCollapsed ? 0 : 2}>
                   <item.icon />
@@ -432,7 +468,7 @@ export default function App() {
               <MenuContent bg="gray.800" borderColor="gray.700">
                 <MenuItem
                   value="profile"
-                  onClick={() => setActiveTab('profile')}
+                  onClick={() => changeStudentTab('profile')}
                   color="gray.200"
                   _hover={{ bg: 'gray.700' }}
                 >
@@ -563,6 +599,9 @@ export default function App() {
 
           {/* Jobs Tab */}
           {activeTab === 'jobs' && <StudentJobs token={token} />}
+
+          {/* Results Tab */}
+          {activeTab === 'results' && <StudentResults token={token} />}
         </Box>
       </Flex>
     </Flex>
