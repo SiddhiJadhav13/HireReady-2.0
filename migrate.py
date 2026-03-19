@@ -33,6 +33,7 @@ new_user_cols = {
     "preferred_job_roles": "TEXT DEFAULT ''",
     "resume_score": "FLOAT",
     "moodle_id": "VARCHAR(8)",
+    "prn_no": "VARCHAR(20)",
     "year": "VARCHAR(4)",
     "division": "VARCHAR(1)",
     "semester": "INTEGER",
@@ -47,6 +48,10 @@ new_user_cols = {
     "github_profile": "TEXT DEFAULT ''",
     "linkedin_profile": "TEXT DEFAULT ''",
     "achievements": "TEXT DEFAULT ''",
+    "resume_filename": "VARCHAR(255) DEFAULT ''",
+    "resume_url": "TEXT DEFAULT ''",
+    "photo_url": "TEXT DEFAULT ''",
+    "resume_text": "TEXT DEFAULT ''",
     "password_reset_token": "VARCHAR(100)",
     "password_reset_expires": "TIMESTAMPTZ",
 }

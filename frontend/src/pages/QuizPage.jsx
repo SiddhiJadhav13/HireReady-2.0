@@ -15,6 +15,8 @@ const QuizPage = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [loading, setLoading] = useState(true);
   const [retestResultId, setRetestResultId] = useState(null);
+  const [viewOnly, setViewOnly] = useState(false);
+  const [sessionDetails, setSessionDetails] = useState({}); // { [resultId]: { questions, answers, score, total } }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,23 +45,53 @@ const QuizPage = () => {
   }, [isRunning]);
 
   const handleStart = () => {
-    if (selectedRole) { setRetestResultId(null); setIsRunning(true); }
+    if (selectedRole) { 
+      setRetestResultId(null); 
+      setViewOnly(false);
+      setIsRunning(true); 
+    }
   };
 
   const handleRetest = (item) => {
     setSelectedRole(item.role);
     setDifficulty(item.difficulty || 'Medium');
     setRetestResultId(item.id);
+    setViewOnly(false);
+    setIsRunning(true);
+  };
+
+  const handleViewResults = (item) => {
+    if (!sessionDetails[item.id]) {
+      alert("Detailed results are only available for the current session. Refreshing the page clears session memory.");
+      return;
+    }
+    setSelectedRole(item.role);
+    setDifficulty(item.difficulty || 'Medium');
+    setRetestResultId(item.id);
+    setViewOnly(true);
     setIsRunning(true);
   };
 
   if (isRunning) {
+    const sessionInfo = retestResultId ? sessionDetails[retestResultId] : null;
+
     return (
       <QuizRunner
         role={selectedRole}
         difficulty={difficulty}
         initialResultId={retestResultId}
-        onComplete={() => setIsRunning(false)}
+        viewOnly={viewOnly}
+        sessionQuestions={sessionInfo?.questions}
+        sessionAnswers={sessionInfo?.answers}
+        onComplete={(data) => {
+          if (data && data.resultId) {
+            setSessionDetails(prev => ({
+              ...prev,
+              [data.resultId]: data
+            }));
+          }
+          setIsRunning(false);
+        }}
         onCancel={() => setIsRunning(false)}
       />
     );
@@ -181,12 +213,19 @@ const QuizPage = () => {
                       >
                         {item.score}/{item.total_questions}
                       </Badge>
-                      <Button size="xs" variant="outline" borderColor="gray.700" color="gray.300"
-                        _hover={{ bg: 'gray.800' }}
-                        onClick={() => handleRetest(item)}
-                      >
-                        Retest
-                      </Button>
+                      <HStack gap={2}>
+                        <Button size="xs" variant="solid" colorPalette="blue"
+                            onClick={() => handleViewResults(item)}
+                        >
+                            View Results
+                        </Button>
+                        <Button size="xs" variant="outline" borderColor="gray.700" color="gray.300"
+                            _hover={{ bg: 'gray.800' }}
+                            onClick={() => handleRetest(item)}
+                        >
+                            Retest
+                        </Button>
+                      </HStack>
                     </HStack>
                   </Flex>
                 );

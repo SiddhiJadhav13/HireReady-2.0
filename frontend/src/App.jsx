@@ -422,9 +422,10 @@ export default function App() {
                     </Text>
                     <Avatar
                       name={user?.name || user?.email || 'U'}
-                      size="sm"
-                      bg="blue.500"
-                      color="white"
+                      size="md"
+                      src={user?.photo_url}
+                      border="2px solid"
+                      borderColor="blue.500"
                     />
                   </HStack>
                 </Button>

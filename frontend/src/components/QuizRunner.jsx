@@ -7,20 +7,27 @@ import { Code, FileQuestion, X, ArrowRight, Check, ChevronLeft } from 'lucide-re
 
 const API_BASE_URL = '/api';
 
-const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel }) => {
-  const [questions, setQuestions] = useState([]);
+const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel, viewOnly = false, sessionQuestions = null, sessionAnswers = null }) => {
+  const [questions, setQuestions] = useState(sessionQuestions || []);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(sessionAnswers || {});
   const [visited, setVisited] = useState(new Set([0]));
   const [markedForReview, setMarkedForReview] = useState(new Set());
   
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!sessionQuestions);
   const [error, setError] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(viewOnly);
   const [score, setScore] = useState(0);
   const [resultId, setResultId] = useState(initialResultId || null);
+  const [showBreakdown, setShowBreakdown] = useState(viewOnly && !!sessionQuestions);
 
   useEffect(() => {
+    if (sessionQuestions && sessionAnswers) {
+      setLoading(false);
+      computeScore(sessionQuestions, sessionAnswers);
+      return;
+    }
+
     const fetchQuestions = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -34,7 +41,9 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
           throw new Error(errData.detail || 'Failed to generate quiz');
         }
         const data = await res.json();
-        setQuestions(data.questions || []);
+        const fetchedQuestions = data.questions || [];
+        setQuestions(fetchedQuestions);
+        
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -43,9 +52,18 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
       }
     };
     fetchQuestions();
-  }, [role, difficulty, initialResultId]);
+  }, [role, difficulty, initialResultId, viewOnly, sessionQuestions, sessionAnswers]);
+
+  const computeScore = (qs, ans) => {
+    let correct = 0;
+    qs.forEach((q, i) => {
+      if ((ans[i] || '') === q.correctAnswer) correct++;
+    });
+    setScore(correct);
+  };
 
   const handleSelectAnswer = (opt) => {
+    if (viewOnly) return;
     setAnswers(prev => ({ ...prev, [currentIndex]: opt }));
   };
 
@@ -71,6 +89,7 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
   };
 
   const toggleReview = () => {
+    if (viewOnly) return;
     setMarkedForReview(prev => {
       const newSet = new Set(prev);
       if (newSet.has(currentIndex)) newSet.delete(currentIndex);
@@ -89,6 +108,7 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
     });
     setScore(correct);
     setSubmitted(true);
+    setShowBreakdown(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -97,7 +117,9 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           role, difficulty, score: correct, totalQuestions: questions.length,
-          questions, answers: answerPayload, resultId,
+          questions: [], // Marks only in DB
+          answers: [],    // Marks only in DB
+          resultId,
         }),
       });
       if (res.ok) {
@@ -107,13 +129,25 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
     } catch (err) { console.error('Failed to submit', err); }
   };
 
+  const handleFinalComplete = () => {
+    if (onComplete) {
+      onComplete({
+        resultId,
+        questions,
+        answers,
+        score,
+        total: questions.length
+      });
+    }
+  };
+
   /* ── Loading ── */
   if (loading) {
     return (
       <Flex direction="column" align="center" justify="center" h="400px" gap={4}>
         <Spinner size="xl" color="blue.400" />
-        <Text color="gray.300" fontWeight="500">Generating {role} quiz ({difficulty})...</Text>
-        <Text color="gray.500" fontSize="sm">This relies on AI and might take 10-20 seconds.</Text>
+        <Text color="gray.300" fontWeight="500">{viewOnly ? 'Loading Results...' : `Generating ${role} quiz (${difficulty})...`}</Text>
+        {!viewOnly && <Text color="gray.500" fontSize="sm">This relies on AI and might take 10-20 seconds.</Text>}
       </Flex>
     );
   }
@@ -132,8 +166,8 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
     );
   }
 
-  /* ── Submitted ── */
-  if (submitted) {
+  /* ── Submitted/Breakdown ── */
+  if (submitted && showBreakdown) {
     const pct = Math.round((score / questions.length) * 100);
     let badgeColor = 'red';
     let message = 'Needs Practice';
@@ -141,25 +175,111 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
     else if (pct >= 50) { badgeColor = 'yellow'; message = 'Good Job'; }
 
     return (
-      <Flex direction="column" align="center" justify="center" h="400px" gap={5}>
-        <Heading size="lg" color="gray.100">Quiz Complete!</Heading>
-        <Box textAlign="center">
-          <Text fontSize="5xl" fontWeight="800" color={`${badgeColor}.400`}>
-            {score}
-          </Text>
-          <Text color="gray.400" fontSize="lg">/ {questions.length}</Text>
-        </Box>
-        <Badge colorPalette={badgeColor} px={4} py={2} borderRadius="full" fontSize="md">
-          {message} ({pct}%)
-        </Badge>
-        <HStack gap={3} mt={4}>
-          <Button colorPalette="blue" onClick={onComplete}>View Results History</Button>
-          <Button variant="outline" borderColor="gray.700" color="gray.300" onClick={onCancel}>
-            Take Another Quiz
-          </Button>
-        </HStack>
-      </Flex>
+      <Box maxW="900px" mx="auto" w="full">
+        <Flex justify="space-between" align="center" mb={6}>
+          <VStack align="flex-start" gap={1}>
+            <Heading size="lg" color="gray.100">{viewOnly ? 'Quiz Review' : 'Quiz Results'}</Heading>
+            <Text color="gray.400">{role} • {difficulty}</Text>
+          </VStack>
+          <HStack gap={4}>
+            <Box textAlign="right">
+              <Text fontSize="2xl" fontWeight="800" color={`${badgeColor}.400`} display="inline">
+                {score}
+              </Text>
+              <Text color="gray.400" fontSize="md" display="inline"> / {questions.length}</Text>
+              <Text fontSize="xs" color="gray.500">{message} ({pct}%)</Text>
+            </Box>
+            <Button colorPalette="blue" size="sm" onClick={handleFinalComplete}>Close Review</Button>
+          </HStack>
+        </Flex>
+
+        <VStack gap={4} align="stretch" mb={8}>
+          {questions.map((q, i) => {
+            const userAnswer = answers[i] || '';
+            const isCorrect = userAnswer === q.correctAnswer;
+            const statusColor = isCorrect ? 'green.500' : 'red.500';
+
+            return (
+              <Box 
+                key={i} 
+                bg="gray.900" 
+                border="1px solid" 
+                borderColor={isCorrect ? 'green.800/50' : 'red.800/50'} 
+                borderRadius="xl" 
+                p={5}
+              >
+                <Flex justify="space-between" mb={3}>
+                  <HStack>
+                     <Badge colorPalette={statusColor.split('.')[0]} variant="solid">Q{i + 1}</Badge>
+                     <Text color="gray.300" fontSize="sm" fontWeight="bold">
+                        {isCorrect ? 'Correct' : 'Incorrect'}
+                     </Text>
+                  </HStack>
+                  {q.type === 'snippet' && <Badge colorPalette="teal" variant="outline" size="xs">Snippet</Badge>}
+                </Flex>
+
+                <Text color="gray.100" mb={4} fontWeight="500">{q.question.split('```')[0]}</Text>
+                
+                {q.type === 'snippet' && (
+                  <Box bg="gray.950" border="1px solid" borderColor="gray.800" borderRadius="md" p={3} mb={4} fontFamily="mono" fontSize="xs" color="green.300">
+                    <pre>{q.question.split('```')[1] || ''}</pre>
+                  </Box>
+                )}
+
+                <VStack align="stretch" gap={2}>
+                  {q.options.map((opt) => {
+                    const isSelected = userAnswer === opt;
+                    const isRight = q.correctAnswer === opt;
+                    
+                    let bgColor = 'transparent';
+                    let borderColor = 'gray.700';
+                    let textColor = 'gray.400';
+                    let icon = null;
+
+                    if (isRight) {
+                        bgColor = 'green.500/10';
+                        borderColor = 'green.500';
+                        textColor = 'green.200';
+                        icon = <Icon asChild color="green.400" w={4} h={4}><Check /></Icon>;
+                    } else if (isSelected && !isCorrect) {
+                        bgColor = 'red.500/10';
+                        borderColor = 'red.500';
+                        textColor = 'red.200';
+                        icon = <Icon asChild color="red.400" w={4} h={4}><X /></Icon>;
+                    }
+
+                    return (
+                      <HStack 
+                        key={opt} 
+                        px={4} py={2} 
+                        borderRadius="md" 
+                        border="1px solid" 
+                        borderColor={borderColor}
+                        bg={bgColor}
+                        justify="space-between"
+                      >
+                        <Text fontSize="sm" color={textColor}>{opt}</Text>
+                        {icon}
+                      </HStack>
+                    );
+                  })}
+                </VStack>
+              </Box>
+            );
+          })}
+        </VStack>
+        
+        <Flex justify="center" pb={10}>
+             <Button size="lg" colorPalette="blue" onClick={handleFinalComplete}>Back to Dashboard</Button>
+        </Flex>
+      </Box>
     );
+  }
+
+  /* ── Submitted (Old Summary - Hidden by showBreakdown) ── */
+  if (submitted) {
+    setShowBreakdown(true);
+    return null;
   }
 
   /* ── Active quiz ── */
@@ -286,6 +406,7 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
                 colorPalette="purple" 
                 borderColor={markedForReview.has(currentIndex) ? 'transparent' : 'purple.500/50'}
                 onClick={toggleReview}
+                disabled={viewOnly}
               >
                 Mark for Review
               </Button>
@@ -349,8 +470,13 @@ const QuizRunner = ({ role, difficulty, initialResultId, onComplete, onCancel })
             </VStack>
           </Box>
 
-          <Button colorPalette="green" size="lg" w="full" onClick={handleSubmit} fontSize="md" fontWeight="bold">
-            SUBMIT QUIZ
+          <Button 
+            colorPalette={viewOnly ? "blue" : "green"} 
+            size="lg" w="full" 
+            onClick={viewOnly ? () => setShowBreakdown(true) : handleSubmit} 
+            fontSize="md" fontWeight="bold"
+          >
+            {viewOnly ? "VIEW RESULTS" : "SUBMIT QUIZ"}
           </Button>
         </Box>
 

@@ -28,6 +28,7 @@ export default function StudentOnboarding({ token, user, onComplete, onLogout })
     name: user?.name || '',
     email: user?.email || '',
     moodle_id: user?.moodle_id || '',
+    prn_no: user?.prn_no || '',
     year: user?.year || '',
     division: user?.division || '',
     semester: user?.semester || '',
@@ -289,8 +290,17 @@ export default function StudentOnboarding({ token, user, onComplete, onLogout })
                     <Input value={formData.email} readOnly {...inputStyles} cursor="not-allowed" />
                   </Field>
                 </Box>
-                <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column">
-                  <Avatar name={formData.name} src={photoPreview} size="xl" />
+                <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" gap={4}>
+                  <Avatar 
+                    name={formData.name} 
+                    src={photoPreview} 
+                    size="2xl" 
+                    h="140px" 
+                    w="140px"
+                    border="4px solid"
+                    borderColor="purple.500"
+                    boxShadow="0 0 20px rgba(167, 139, 250, 0.3)"
+                  />
                   <Input
                     type="file"
                     accept="image/*"
@@ -307,6 +317,14 @@ export default function StudentOnboarding({ token, user, onComplete, onLogout })
                     placeholder="Enter 8-digit Moodle ID" 
                     value={formData.moodle_id} 
                     onChange={(e) => updateField('moodle_id', e.target.value)}
+                    {...inputStyles}
+                  />
+                </Field>
+                <Field label="PRN No." required>
+                  <Input 
+                    placeholder="Enter PRN Number" 
+                    value={formData.prn_no} 
+                    onChange={(e) => updateField('prn_no', e.target.value)}
                     {...inputStyles}
                   />
                 </Field>
@@ -486,7 +504,7 @@ export default function StudentOnboarding({ token, user, onComplete, onLogout })
                   <Box key={idx} p={4} bg="gray.800/50" borderRadius="xl" border="1px solid" borderColor="gray.700" position="relative">
                     <IconButton 
                       aria-label="Remove project" size="xs" variant="ghost" colorPalette="red"
-                      position="absolute" top={2} right={2} onClick={() => removeProject(idx)}
+                      position="absolute" top={2} right={2}
                     >
                       <Trash2 size={14} />
                     </IconButton>
@@ -503,9 +521,6 @@ export default function StudentOnboarding({ token, user, onComplete, onLogout })
                     </VStack>
                   </Box>
                 ))}
-                <Button variant="outline" size="sm" onClick={addProject} w="fit-content" colorPalette="purple">
-                  <Plus size={16} style={{marginRight: '6px'}} /> Add Project
-                </Button>
               </VStack>
 
               <Separator borderColor="gray.800" />

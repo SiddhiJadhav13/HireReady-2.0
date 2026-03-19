@@ -33,6 +33,7 @@ class User(Base):
     github_username = Column(String(100), default="")
     leetcode_username = Column(String(100), default="")
     mobile_number = Column(String(20), default="")
+    prn_no = Column(String(20), nullable=True)
     moodle_id = Column(String(8), nullable=True)
     year = Column(String(4), nullable=True)       # FE, SE, TE, BE
     division = Column(String(1), nullable=True)   # A, B, C
