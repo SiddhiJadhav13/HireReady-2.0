@@ -465,7 +465,21 @@ export default function TpoDashboard({ token, user, onLogout }) {
     if (!rawUrl || !String(rawUrl).trim()) return '';
     const url = String(rawUrl).trim();
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return `${window.location.origin}${url.startsWith('/') ? url : `/${url}`}`;
+
+    const normalized = url.replace(/\\/g, '/');
+    const lower = normalized.toLowerCase();
+
+    const uploadsIndex = lower.indexOf('/uploads/');
+    if (uploadsIndex !== -1) {
+      return `${window.location.origin}${normalized.slice(uploadsIndex)}`;
+    }
+
+    const resumesIndex = lower.indexOf('/resumes/');
+    if (resumesIndex !== -1) {
+      return `${window.location.origin}/uploads${normalized.slice(resumesIndex)}`;
+    }
+
+    return `${window.location.origin}${normalized.startsWith('/') ? normalized : `/${normalized}`}`;
   };
 
   const handleViewResume = (student) => {

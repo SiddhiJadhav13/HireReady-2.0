@@ -2540,19 +2540,41 @@ def get_shortlisted_students(
     students = db.query(User).filter(User.role == "student").all()
 
     def normalize_resume_url_for_response(raw_url: Optional[str]) -> str:
-        """Return a stable resume URL for API consumers while preserving DB-backed value semantics."""
+        """Return a stable resume URL that works for both legacy and current stored values."""
         url = (raw_url or "").strip()
         if not url:
             return ""
 
-        # Keep local uploaded-file paths relative so frontend proxy/current host can serve them.
+        # Keep public external links untouched.
         if url.startswith("http://") or url.startswith("https://"):
             parsed = urlparse(url)
             if parsed.path.startswith("/uploads/") and parsed.hostname in {"localhost", "127.0.0.1"}:
                 return parsed.path
             return url
 
-        return url if url.startswith("/") else f"/{url}"
+        normalized = url.replace("\\", "/")
+        lower = normalized.lower()
+
+        # Legacy values may contain absolute filesystem paths. Extract app-relative uploads path.
+        uploads_marker = "/uploads/"
+        idx = lower.find(uploads_marker)
+        if idx != -1:
+            return normalized[idx:]
+
+        # Older records could store /resumes/... without the /uploads prefix.
+        resumes_marker = "/resumes/"
+        ridx = lower.find(resumes_marker)
+        if ridx != -1:
+            return f"/uploads{normalized[ridx:]}"
+
+        # Last fallback: if we can identify a filename, point to canonical resumes location.
+        filename = Path(normalized).name
+        if filename:
+            candidate = RESUMES_DIR / filename
+            if candidate.exists():
+                return f"/uploads/resumes/{filename}"
+
+        return normalized if normalized.startswith("/") else f"/{normalized}"
 
     def build_shortlist_item(s: User, source: str) -> dict:
         resume_sc = s.resume_score or 0
