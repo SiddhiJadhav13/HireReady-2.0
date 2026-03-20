@@ -1463,3 +1463,31 @@ WHERE users.id = %(id_1)s
 2026-03-20 13:25:35,581 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/natural-language-processing-with-nltk-and-spacy/
 2026-03-20 13:25:35,591 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/python-programming-mastering-the-basics/
 2026-03-20 13:25:36,508 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
+2026-03-20 16:40:23,677 [INFO] main: Loading ML models in background thread...
+2026-03-20 16:40:23,682 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-20 16:40:31,198 [INFO] main: ML models loaded successfully in 7.52 seconds.
+2026-03-20 17:50:03,130 [WARNING] main: SMTP credentials missing; logging reset link instead of sending email.
+2026-03-20 17:50:03,131 [INFO] main: Password reset link for 24204015@apsit.edu.in: http://localhost:5173/reset-password?token=mWCFVKTZwDcF37J7UocX24qanIsSAjfNc-B1A0W_93E
+2026-03-20 17:51:11,326 [WARNING] main: SMTP credentials missing; logging reset link instead of sending email.
+2026-03-20 17:51:11,327 [INFO] main: Password reset link for 24204015@apsit.edu.in: http://localhost:5173/reset-password?token=XZZah3Lgdo4hZXZ52mcbNI82TlISYq2kHP2NXc1Atbw
+2026-03-20 17:52:17,682 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 17:52:18,086 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/ai-for-everyone
+2026-03-20 17:52:18,355 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/artificial-intelligence-certificate
+2026-03-20 17:52:18,425 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.coursera.org/specializations/deep-learning
+2026-03-20 17:52:18,456 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.dsc.org/certification/machine-learning-certification/
+2026-03-20 17:52:18,662 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/ai-for-everyone
+2026-03-20 17:52:18,870 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/artificial-intelligence-certificate
+2026-03-20 17:52:19,146 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.dsc.org/certification/machine-learning-certification/
+2026-03-20 17:52:31,914 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 17:52:31,974 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/advanced-computer-vision/
+2026-03-20 17:52:31,975 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/computer-vision-fundamentals/
+2026-03-20 17:52:32,019 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/advanced-computer-vision/
+2026-03-20 17:52:32,026 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/computer-vision-fundamentals/
+2026-03-20 17:52:32,237 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-machine-learning-specialty/
+2026-03-20 17:52:32,278 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certificates/certificate-portfolio
+2026-03-20 17:52:32,306 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/deep-learning-for-computer-vision
+2026-03-20 17:52:32,426 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
+2026-03-20 17:52:32,490 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/intermediate-markdown/convolutional-neural-networks/
+2026-03-20 17:52:32,704 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/deep-learning-for-computer-vision
+2026-03-20 17:52:33,032 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/intermediate-markdown/convolutional-neural-networks/
+2026-03-20 17:52:33,086 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
