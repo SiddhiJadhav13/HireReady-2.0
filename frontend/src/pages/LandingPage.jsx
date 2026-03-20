@@ -248,11 +248,7 @@ export default function LandingPage({ onGetStarted, onLoginClick }) {
             HireReady
           </Heading>
         </HStack>
-        <HStack gap={8} display={{ base: 'none', md: 'flex' }}>
-          <Text as="a" href="#" color="fg.muted" fontSize="sm" fontWeight="600" _hover={{ color: 'fg' }}>Overview</Text>
-          <Text as="a" href="#" color="fg.muted" fontSize="sm" fontWeight="600" _hover={{ color: 'fg' }}>Features</Text>
-          <Text as="a" href="#" color="fg.muted" fontSize="sm" fontWeight="600" _hover={{ color: 'fg' }}>Pricing</Text>
-        </HStack>
+        {/* removed nav links: Overview / Features / Pricing per request */}
         <HStack gap={4}>
           <ColorModeButton variant="ghost" />
           <Button 

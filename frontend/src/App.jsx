@@ -55,6 +55,10 @@ const PATH_TO_TAB = Object.fromEntries(
 );
 
 export default function App() {
+  // debug: log when App component mounts/renders
+  useEffect(() => {
+    console.log('App mounted');
+  }, []);
   /* ── Tab state ───────────────────────────────────────────────────── */
   const [activeTab, setActiveTab] = useState(() => PATH_TO_TAB[window.location.pathname] || 'dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -458,9 +462,10 @@ export default function App() {
                     </Text>
                     <Avatar
                       name={user?.name || user?.email || 'U'}
-                      size="sm"
-                      bg="blue.500"
-                      color="white"
+                      size="md"
+                      src={user?.photo_url}
+                      border="2px solid"
+                      borderColor="blue.500"
                     />
                   </HStack>
                 </Button>

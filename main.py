@@ -1049,6 +1049,7 @@ def get_me(current_user: User = Depends(get_current_user)):
         "certifications": current_user.certifications or "",
         "preferred_job_roles": current_user.preferred_job_roles or "",
         "moodle_id": current_user.moodle_id or "",
+        "prn_no": current_user.prn_no or "",
         "year": current_user.year or "",
         "division": current_user.division or "",
         "semester": current_user.semester,
@@ -1063,6 +1064,8 @@ def get_me(current_user: User = Depends(get_current_user)):
         "github_profile": current_user.github_profile or "",
         "linkedin_profile": current_user.linkedin_profile or "",
         "achievements": current_user.achievements or "",
+        "resume_url": current_user.resume_url or "",
+        "photo_url": current_user.photo_url or "",
     }
 
 
@@ -1266,6 +1269,7 @@ async def update_profile(
     certifications: Optional[str] = Form(None),
     preferred_job_roles: Optional[str] = Form(None),
     moodle_id: Optional[str] = Form(None),
+    prn_no: Optional[str] = Form(None),
     year: Optional[str] = Form(None),
     division: Optional[str] = Form(None),
     semester: Optional[int] = Form(None),
@@ -1312,6 +1316,7 @@ async def update_profile(
         current_user.preferred_job_roles = preferred_job_roles.strip()
 
     if moodle_id is not None: current_user.moodle_id = moodle_id.strip()
+    if prn_no is not None: current_user.prn_no = prn_no.strip()
     if year is not None: current_user.year = year.strip()
     if division is not None: current_user.division = division.strip()
     if semester is not None: current_user.semester = semester
@@ -1384,6 +1389,7 @@ async def update_profile(
             "name": current_user.name,
             "resume_filename": current_user.resume_filename,
             "resume_url": current_user.resume_url or "",
+            "photo_url": current_user.photo_url or "",
             "email": current_user.email,
             "github_username": current_user.github_username,
             "leetcode_username": current_user.leetcode_username,
@@ -1392,6 +1398,7 @@ async def update_profile(
             "certifications": current_user.certifications or "",
             "preferred_job_roles": current_user.preferred_job_roles or "",
             "moodle_id": current_user.moodle_id or "",
+            "prn_no": current_user.prn_no or "",
             "year": current_user.year or "",
             "division": current_user.division or "",
             "semester": current_user.semester,
@@ -1977,6 +1984,29 @@ async def analyze_full_profile(
         "features": non_zero_features,
     }
 
+class PhotoUpdateRequest(BaseModel):
+    photo_url: Optional[str] = None
+    filePath: Optional[str] = None
+
+@app.post("/api/profile/photo")
+@app.post("/api/auth/profile/photo")
+def update_profile_photo(
+    data: PhotoUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Save the public Supabase photo URL or filePath to the user's profile."""
+    photo_url = data.photo_url
+    if not photo_url and data.filePath:
+        # Construct public URL for profile_photos bucket
+        supabase_url = os.getenv("VITE_SUPABASE_URL", "https://swxwubiwmmsezuelrisg.supabase.co")
+        photo_url = f"{supabase_url}/storage/v1/object/public/profile_photos/{data.filePath}"
+    
+    if photo_url:
+        current_user.photo_url = photo_url
+        db.commit()
+    return {"message": "Photo URL updated", "photo_url": photo_url}
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # HISTORY ENDPOINT
@@ -2113,9 +2143,9 @@ def submit_quiz_endpoint(
                 result.difficulty = data.difficulty
                 result.score = data.score
                 result.total_questions = data.totalQuestions
-                result.questions = data.questions if data.questions else result.questions
-                result.answers = data.answers
-                # created_at remains the same, or we could update a updated_at field
+                # We do NOT store questions and answers in the DB anymore
+                result.questions = [] 
+                result.answers = []
                 db.commit()
                 db.refresh(result)
                 return {"message": "Quiz result updated successfully", "resultId": str(result.id)}
@@ -2127,8 +2157,8 @@ def submit_quiz_endpoint(
             difficulty=data.difficulty,
             score=data.score,
             total_questions=data.totalQuestions,
-            questions=data.questions,
-            answers=data.answers
+            questions=[], # Do not store detailed questions
+            answers=[]    # Do not store detailed answers
         )
         db.add(result)
         db.commit()
@@ -2136,7 +2166,6 @@ def submit_quiz_endpoint(
         return {"message": "Quiz submitted successfully", "resultId": str(result.id)}
     except Exception as e:
         logger.error("Quiz submit failed: %s", e)
-        # db.rollback() # Handled by session usually but good practice
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/quiz/results")

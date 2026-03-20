@@ -183,3 +183,1283 @@
 2026-03-17 18:27:57,059 [INFO] main: Loading ML models in background thread...
 2026-03-17 18:27:57,070 [INFO] main: Loaded 100 roles into skill cache.
 2026-03-17 18:28:18,258 [INFO] main: ML models loaded successfully in 21.20 seconds.
+2026-03-17 20:01:43,855 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:01:43,875 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:02:07,324 [INFO] main: ML models loaded successfully in 23.47 seconds.
+2026-03-17 20:11:36,410 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:11:36,422 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:11:59,807 [INFO] main: ML models loaded successfully in 23.40 seconds.
+2026-03-17 20:13:08,472 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:13:08,501 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:13:22,157 [WARNING] main: ML Prediction skipped: models not yet loaded.
+2026-03-17 20:13:37,992 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:13:40,992 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/ios-development-swift
+2026-03-17 20:13:40,993 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://developer.apple.com/certifications/
+2026-03-17 20:13:41,089 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/build-mobile-apps-with-react-native
+2026-03-17 20:13:41,251 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://developers.google.com/certification/android-developer
+2026-03-17 20:13:42,100 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.udacity.com/course/mobile-app-development-with-java--ud853
+2026-03-17 20:13:42,583 [INFO] main: is_valid_url: INVALID (GET 404) - https://developer.apple.com/certifications/
+2026-03-17 20:13:42,778 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/ios-development-swift
+2026-03-17 20:13:42,901 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/build-mobile-apps-with-react-native
+2026-03-17 20:13:43,202 [INFO] main: is_valid_url: INVALID (GET 404) - https://developers.google.com/certification/android-developer
+2026-03-17 20:13:44,711 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.udacity.com/course/mobile-app-development-with-java--ud853
+2026-03-17 20:13:50,243 [INFO] main: ML models loaded successfully in 41.77 seconds.
+2026-03-17 20:15:59,272 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:15:59,311 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:16:29,758 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:16:29,910 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:16:35,415 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/database-systems/
+2026-03-17 20:16:35,717 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/certified-database-administrator-associate/
+2026-03-17 20:16:36,106 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/database-administration
+2026-03-17 20:16:36,186 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/sql
+2026-03-17 20:16:36,221 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://education.oracle.com/Oracle-Certified-Professional-Database-Administrator/JES202
+2026-03-17 20:16:36,239 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/news/database-administration-bootcamp/
+2026-03-17 20:16:36,407 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/learn/oracle-database-administration
+2026-03-17 20:16:37,153 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.udacity.com/course/advanced-database-systems--cs262
+2026-03-17 20:16:37,368 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/training/paths/microsoft-sql-server-database-administration-association/
+2026-03-17 20:16:39,580 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/database-systems/
+2026-03-17 20:16:40,238 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/sql/t-sql/language-elements/sql-certification?view=sql-server-2017
+2026-03-17 20:16:40,348 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/certified-database-administrator-associate/
+2026-03-17 20:16:41,402 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/news/database-administration-bootcamp/
+2026-03-17 20:16:41,788 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/learn/oracle-database-administration
+2026-03-17 20:16:41,882 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/database-administration
+2026-03-17 20:16:41,918 [INFO] main: is_valid_url: INVALID (GET 404) - https://education.oracle.com/Oracle-Certified-Professional-Database-Administrator/JES202
+2026-03-17 20:16:41,998 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/sql
+2026-03-17 20:16:42,546 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/training/paths/microsoft-sql-server-database-administration-association/
+2026-03-17 20:16:43,044 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.udacity.com/course/advanced-database-systems--cs262
+2026-03-17 20:16:43,850 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.ibm.com/developerworks/community/forums/html/topics/database-administration-ibm-certification
+2026-03-17 20:16:48,800 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/sql/t-sql/language-elements/sql-certification?view=sql-server-2017
+2026-03-17 20:17:36,288 [INFO] main: ML models loaded successfully in 97.01 seconds.
+2026-03-17 20:17:44,350 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:30:22,500 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:30:22,515 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:31:03,417 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:31:03,994 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:31:45,321 [INFO] main: ML models loaded successfully in 82.82 seconds.
+2026-03-17 20:32:14,739 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:32:15,295 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:40:17,956 [INFO] main: Loading ML models in background thread...
+2026-03-17 20:40:17,972 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 20:40:50,692 [INFO] main: ML models loaded successfully in 32.73 seconds.
+2026-03-17 20:44:24,248 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:44:24,535 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:52:20,799 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:52:21,374 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:53:33,953 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 20:53:34,083 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-17 21:06:32,173 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:06:32,187 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:06:40,822 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': 'a6f8ae81-3d05-4211-8dde-d194154cdefb', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:06:44,989 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': '68e73498-f035-43b4-8bf1-04e1c36c0b12', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:07:04,907 [INFO] main: ML models loaded successfully in 32.73 seconds.
+2026-03-17 21:07:22,022 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:07:22,034 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:07:22,860 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': '68e73498-f035-43b4-8bf1-04e1c36c0b12', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:07:39,852 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': 'a6f8ae81-3d05-4211-8dde-d194154cdefb', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:07:43,127 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': '68e73498-f035-43b4-8bf1-04e1c36c0b12', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:07:52,291 [INFO] main: ML models loaded successfully in 30.27 seconds.
+2026-03-17 21:08:12,795 [ERROR] main: Unhandled error on GET /api/notifications/unread-count
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\routing.py", line 291, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 605, in solve_dependencies
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\fastapi\dependencies\utils.py", line 630, in solve_dependencies
+    solved = await run_in_threadpool(call, **solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 2502, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+  File "C:\Users\Pooja\Documents\hire-ready_main\HireReady-2.0\services\auth.py", line 107, in get_current_user
+    user = db.query(User).filter(User.id == subject).first()
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Pooja\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column users.prn_no does not exist
+LINE 1: ...name, users.mobile_number AS users_mobile_number, users.prn_...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.open_to".
+
+[SQL: SELECT users.id AS users_id, users.name AS users_name, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.password_hash AS users_password_hash, users.role AS users_role, users.github_username AS users_github_username, users.leetcode_username AS users_leetcode_username, users.mobile_number AS users_mobile_number, users.prn_no AS users_prn_no, users.moodle_id AS users_moodle_id, users.year AS users_year, users.division AS users_division, users.semester AS users_semester, users.sgpa AS users_sgpa, users.atkt_count AS users_atkt_count, users.atkt_subjects AS users_atkt_subjects, users.drop_year AS users_drop_year, users.internships AS users_internships, users.projects AS users_projects, users.core_interests AS users_core_interests, users.core_skills AS users_core_skills, users.github_profile AS users_github_profile, users.linkedin_profile AS users_linkedin_profile, users.achievements AS users_achievements, users.cgpa AS users_cgpa, users.certifications AS users_certifications, users.preferred_job_roles AS users_preferred_job_roles, users.resume_score AS users_resume_score, users.resume_filename AS users_resume_filename, users.resume_url AS users_resume_url, users.photo_url AS users_photo_url, users.resume_text AS users_resume_text, users.password_reset_token AS users_password_reset_token, users.password_reset_expires AS users_password_reset_expires, users.created_at AS users_created_at 
+FROM users 
+WHERE users.id = %(id_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'id_1': '68e73498-f035-43b4-8bf1-04e1c36c0b12', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-17 21:08:55,571 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:08:55,622 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:10:38,450 [INFO] main: ML models loaded successfully in 102.88 seconds.
+2026-03-17 21:14:57,263 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:14:57,289 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:15:14,816 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:15:14,832 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:15:44,619 [INFO] main: ML models loaded successfully in 29.80 seconds.
+2026-03-17 21:20:18,530 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:20:18,543 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:20:39,553 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:20:39,571 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:21:19,040 [INFO] main: ML models loaded successfully in 39.49 seconds.
+2026-03-17 21:37:03,627 [INFO] main: Loading ML models in background thread...
+2026-03-17 21:37:03,637 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-17 21:37:34,953 [INFO] main: ML models loaded successfully in 31.33 seconds.
+2026-03-19 20:12:04,296 [INFO] main: Loading ML models in background thread...
+2026-03-19 20:12:04,347 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-19 20:13:12,636 [INFO] main: ML models loaded successfully in 68.34 seconds.
+2026-03-19 20:27:54,951 [INFO] services.feature_analyzer: GitHub: cleaned username = 'https:'
+2026-03-19 20:27:55,943 [ERROR] services.feature_analyzer: GitHub API request failed for 'https:': 404 Client Error: Not Found for url: https://api.github.com/users/https:/repos?per_page=100&page=1&type=owner
+2026-03-19 20:27:55,947 [INFO] services.feature_analyzer: LeetCode: cleaned username = 'Poojamaskare'
+2026-03-19 20:28:04,810 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-03-19 20:28:05,934 [INFO] main: Auto-analysis saved: a62ca44c-30a6-42e6-bf04-1082433cef1d
+2026-03-20 12:02:13,365 [INFO] main: Loading ML models in background thread...
+2026-03-20 12:02:13,404 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-20 12:02:48,037 [INFO] main: ML models loaded successfully in 34.67 seconds.
+2026-03-20 13:03:11,107 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:13,028 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/nodejs-developer-bootcamp/
+2026-03-20 13:03:13,301 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-developer-associate/
+2026-03-20 13:03:13,420 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/backend-development-with-python
+2026-03-20 13:03:13,550 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/professional-cloud-developer
+2026-03-20 13:03:13,934 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.pluralsight.com/courses/react-full-stack-development-node-js
+2026-03-20 13:03:14,493 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/nodejs-developer-bootcamp/
+2026-03-20 13:03:15,574 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-cloud-developer
+2026-03-20 13:03:15,863 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/backend-development-with-python
+2026-03-20 13:03:16,320 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.pluralsight.com/courses/react-full-stack-development-node-js
+2026-03-20 13:03:19,771 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:21,622 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/nodejs-the-complete-guide/
+2026-03-20 13:03:21,934 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/data-structures-algorithms-python
+2026-03-20 13:03:21,978 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/the-complete-web-development-course-2/
+2026-03-20 13:03:22,606 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certified-cloud-developer
+2026-03-20 13:03:23,015 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/intermediate-front-end-development/projects/full-stack-development-with-flask
+2026-03-20 13:03:23,891 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/nodejs-the-complete-guide/
+2026-03-20 13:03:24,091 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/the-complete-web-development-course-2/
+2026-03-20 13:03:24,231 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer/
+2026-03-20 13:03:24,366 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/data-structures-algorithms-python
+2026-03-20 13:03:24,993 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/intermediate-front-end-development/projects/full-stack-development-with-flask
+2026-03-20 13:03:25,293 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certified-cloud-developer
+2026-03-20 13:03:42,781 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:44,650 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/api-design-patterns/
+2026-03-20 13:03:44,651 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/api-architecture/
+2026-03-20 13:03:44,829 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/api-security-py
+2026-03-20 13:03:45,221 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/advanced-node-and-express/
+2026-03-20 13:03:45,222 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/associate-cloud-developer
+2026-03-20 13:03:46,357 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/api-design-patterns/
+2026-03-20 13:03:46,361 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/api-architecture/
+2026-03-20 13:03:46,798 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/api-security-py
+2026-03-20 13:03:47,362 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/advanced-node-and-express/
+2026-03-20 13:03:48,039 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/associate-cloud-developer
+2026-03-20 13:12:55,964 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:12:56,708 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:12:58,160 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/cloud-native-application-developer
+2026-03-20 13:12:59,736 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.linuxfoundation.org/training/certified-associate-in-devops-adoe/
+2026-03-20 13:13:00,022 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:00,088 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/aws-certification-associate-developer-professional/
+2026-03-20 13:13:00,211 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/kubernetes-administration
+2026-03-20 13:13:00,213 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:00,274 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/cloud-computing-fundamentals
+2026-03-20 13:13:00,388 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learnDOCKER-AND-KUBERNETES-THE-COMPLETE-GUIDE/
+2026-03-20 13:13:00,439 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.pluralsight.com/courses/devops-fundamentals/
+2026-03-20 13:13:01,011 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/devsecops-the-top-5-essential-tools
+2026-03-20 13:13:02,006 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:13:02,039 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/cloud-native-application-developer
+2026-03-20 13:13:02,549 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-expert?redirectedBy=edgeRedirect
+2026-03-20 13:13:02,901 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:02,993 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/aws-certification-associate-developer-professional/
+2026-03-20 13:13:03,903 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learnDOCKER-AND-KUBERNETES-THE-COMPLETE-GUIDE/
+2026-03-20 13:13:04,081 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.linuxfoundation.org/training/certified-associate-in-devops-adoe/
+2026-03-20 13:13:04,401 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/cloud-computing-fundamentals
+2026-03-20 13:13:04,432 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:04,453 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/kubernetes-administration
+2026-03-20 13:13:04,578 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.pluralsight.com/courses/devops-fundamentals/
+2026-03-20 13:13:05,151 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/devsecops-the-top-5-essential-tools
+2026-03-20 13:13:06,405 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/aws-certified-developer-associate/devops-with-jenkins-and-docker-on-ubuntu
+2026-03-20 13:13:06,433 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/cncf-cloud-native-systems
+2026-03-20 13:13:06,486 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/agile-scrum-fundamentals
+2026-03-20 13:13:06,585 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/devops-certification
+2026-03-20 13:13:06,798 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-devops-engineer-professional/
+2026-03-20 13:13:06,838 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:13:11,636 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-associate/
+2026-03-20 13:13:11,849 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/aws-certified-developer-associate/devops-with-jenkins-and-docker-on-ubuntu
+2026-03-20 13:13:12,135 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/cncf-cloud-native-systems
+2026-03-20 13:13:12,297 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/devops-certification
+2026-03-20 13:13:12,407 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/agile-scrum-fundamentals
+2026-03-20 13:13:12,665 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/aws-cloud-practitioner-essential-2021-updated/
+2026-03-20 13:13:12,784 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/exam/az-900/fundamentals
+2026-03-20 13:13:12,975 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-expert?redirectedBy=edgeRedirect
+2026-03-20 13:13:12,986 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/training/paths/azure-developer/
+2026-03-20 13:13:13,116 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/solutions-architect-associate/
+2026-03-20 13:13:13,487 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.udacity.com/course/aws-solutions-architect-associate--certified-by-aws-- ND9015Q
+2026-03-20 13:13:17,058 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer
+2026-03-20 13:13:17,439 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/exam/az-900/fundamentals
+2026-03-20 13:13:17,704 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.udacity.com/course/aws-solutions-architect-associate--certified-by-aws-- ND9015Q
+2026-03-20 13:13:18,283 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/aws-cloud-practitioner-essential-2021-updated/
+2026-03-20 13:13:18,681 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer
+2026-03-20 13:13:18,898 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/solutions-architect-associate/
+2026-03-20 13:13:19,218 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/training/paths/azure-developer/
+2026-03-20 13:13:19,862 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-associate/
+2026-03-20 13:19:51,556 [INFO] main: Serving cached roadmap for role: Backend Developer
+2026-03-20 13:20:00,111 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:20:02,318 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/security-and-authentication-on-the-web/
+2026-03-20 13:20:02,330 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/modern-authentication-with-azure-active-directory/
+2026-03-20 13:20:02,411 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/authentication-authorization-in-net-core/
+2026-03-20 13:20:02,498 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certifications/security-identity-access-management
+2026-03-20 13:20:02,680 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/iam-architecture/
+2026-03-20 13:20:02,727 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/oauth
+2026-03-20 13:20:02,908 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-security-administrator/
+2026-03-20 13:20:03,439 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/security-and-authentication-on-the-web/
+2026-03-20 13:20:03,484 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/modern-authentication-with-azure-active-directory/
+2026-03-20 13:20:03,562 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/authentication-authorization-in-net-core/
+2026-03-20 13:20:04,225 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/iam-architecture/
+2026-03-20 13:20:04,319 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/oauth
+2026-03-20 13:20:05,858 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-security-administrator/
+2026-03-20 13:22:33,680 [INFO] main: Serving cached roadmap for role: Backend Developer
+2026-03-20 13:22:38,548 [INFO] main: Serving cached roadmap for skill: Authentication
+2026-03-20 13:24:45,443 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:24:46,659 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/flutter-and-python-full-stack-development/
+2026-03-20 13:24:47,025 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development?query=full+stack+with+react+mern
+2026-03-20 13:24:47,183 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/full-stack-web-development-with-python-django-and-react
+2026-03-20 13:24:47,901 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/flutter-and-python-full-stack-development/
+2026-03-20 13:24:48,384 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.hackerrank.com/domains/full-stack
+2026-03-20 13:24:48,562 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development?query=full+stack+with+react+mern
+2026-03-20 13:24:48,796 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/full-stack-web-development-with-python-django-and-react
+2026-03-20 13:24:49,008 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:24:50,680 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.hackerrank.com/domains/full-stack
+2026-03-20 13:24:51,560 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/the-complete-web-development-bootcamp/
+2026-03-20 13:24:51,868 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development
+2026-03-20 13:24:52,055 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/full-stack-development-with-python-and-django
+2026-03-20 13:24:53,165 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/the-complete-web-development-bootcamp/
+2026-03-20 13:24:53,358 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/web-development-bootcamp
+2026-03-20 13:24:53,631 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/full-stack-development-with-python-and-django
+2026-03-20 13:24:53,830 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development
+2026-03-20 13:24:54,921 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/web-development-bootcamp
+2026-03-20 13:25:01,655 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:02,929 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/front-end-development-with-html-css-and-javascript/
+2026-03-20 13:25:03,357 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:03,633 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development-with-mongodb
+2026-03-20 13:25:03,636 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.coursera.org/specializations/python
+2026-03-20 13:25:04,453 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certification/cloud-developer
+2026-03-20 13:25:04,844 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/front-end-development-with-html-css-and-javascript/
+2026-03-20 13:25:05,826 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/full-stack-development-with-flask/
+2026-03-20 13:25:06,406 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/2026/build-a-cloud-application/
+2026-03-20 13:25:06,769 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/django-web-development/
+2026-03-20 13:25:06,896 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certification/cloud-developer
+2026-03-20 13:25:06,958 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/training/certifications/azure-developer/
+2026-03-20 13:25:07,175 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/backend-development-with-nodejs
+2026-03-20 13:25:07,629 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development-with-mongodb
+2026-03-20 13:25:07,783 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/courses/node-js-and-express-js/
+2026-03-20 13:25:07,910 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/full-stack-development-with-flask/
+2026-03-20 13:25:08,654 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.aws.training/Free/Account/Welcome/
+2026-03-20 13:25:09,140 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/2026/build-a-cloud-application/
+2026-03-20 13:25:10,141 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/django-web-development/
+2026-03-20 13:25:10,206 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.aws.training/Free/Account/Welcome/
+2026-03-20 13:25:10,241 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/courses/node-js-and-express-js/
+2026-03-20 13:25:10,396 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/backend-development-with-nodejs
+2026-03-20 13:25:10,560 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/training/certifications/azure-developer/
+2026-03-20 13:25:30,152 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:32,817 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:34,431 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/natural-language-processing-with-nltk-and-spacy/
+2026-03-20 13:25:34,435 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/python-programming-mastering-the-basics/
+2026-03-20 13:25:34,497 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-machine-learning-specialty/
+2026-03-20 13:25:34,774 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.coursera.org/specializations/machine-learning
+2026-03-20 13:25:34,779 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.edx.org/course/deep-learning-with-tensorflow
+2026-03-20 13:25:34,957 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
+2026-03-20 13:25:35,581 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/natural-language-processing-with-nltk-and-spacy/
+2026-03-20 13:25:35,591 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/python-programming-mastering-the-basics/
+2026-03-20 13:25:36,508 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
