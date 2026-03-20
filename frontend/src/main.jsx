@@ -10,3 +10,5 @@ createRoot(document.getElementById('root')).render(
     </Provider>
   </StrictMode>,
 )
+
+console.log('main.jsx executed — root element should contain the app');

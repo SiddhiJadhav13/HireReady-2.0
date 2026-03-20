@@ -1301,3 +1301,165 @@ WHERE users.id = %(id_1)s
 2026-03-17 21:37:03,627 [INFO] main: Loading ML models in background thread...
 2026-03-17 21:37:03,637 [INFO] main: Loaded 100 roles into skill cache.
 2026-03-17 21:37:34,953 [INFO] main: ML models loaded successfully in 31.33 seconds.
+2026-03-19 20:12:04,296 [INFO] main: Loading ML models in background thread...
+2026-03-19 20:12:04,347 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-19 20:13:12,636 [INFO] main: ML models loaded successfully in 68.34 seconds.
+2026-03-19 20:27:54,951 [INFO] services.feature_analyzer: GitHub: cleaned username = 'https:'
+2026-03-19 20:27:55,943 [ERROR] services.feature_analyzer: GitHub API request failed for 'https:': 404 Client Error: Not Found for url: https://api.github.com/users/https:/repos?per_page=100&page=1&type=owner
+2026-03-19 20:27:55,947 [INFO] services.feature_analyzer: LeetCode: cleaned username = 'Poojamaskare'
+2026-03-19 20:28:04,810 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-03-19 20:28:05,934 [INFO] main: Auto-analysis saved: a62ca44c-30a6-42e6-bf04-1082433cef1d
+2026-03-20 12:02:13,365 [INFO] main: Loading ML models in background thread...
+2026-03-20 12:02:13,404 [INFO] main: Loaded 100 roles into skill cache.
+2026-03-20 12:02:48,037 [INFO] main: ML models loaded successfully in 34.67 seconds.
+2026-03-20 13:03:11,107 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:13,028 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/nodejs-developer-bootcamp/
+2026-03-20 13:03:13,301 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-developer-associate/
+2026-03-20 13:03:13,420 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/backend-development-with-python
+2026-03-20 13:03:13,550 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/professional-cloud-developer
+2026-03-20 13:03:13,934 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.pluralsight.com/courses/react-full-stack-development-node-js
+2026-03-20 13:03:14,493 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/nodejs-developer-bootcamp/
+2026-03-20 13:03:15,574 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-cloud-developer
+2026-03-20 13:03:15,863 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/backend-development-with-python
+2026-03-20 13:03:16,320 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.pluralsight.com/courses/react-full-stack-development-node-js
+2026-03-20 13:03:19,771 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:21,622 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/nodejs-the-complete-guide/
+2026-03-20 13:03:21,934 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/data-structures-algorithms-python
+2026-03-20 13:03:21,978 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/the-complete-web-development-course-2/
+2026-03-20 13:03:22,606 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certified-cloud-developer
+2026-03-20 13:03:23,015 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/intermediate-front-end-development/projects/full-stack-development-with-flask
+2026-03-20 13:03:23,891 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/nodejs-the-complete-guide/
+2026-03-20 13:03:24,091 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/the-complete-web-development-course-2/
+2026-03-20 13:03:24,231 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer/
+2026-03-20 13:03:24,366 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/data-structures-algorithms-python
+2026-03-20 13:03:24,993 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/intermediate-front-end-development/projects/full-stack-development-with-flask
+2026-03-20 13:03:25,293 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certified-cloud-developer
+2026-03-20 13:03:42,781 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:03:44,650 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/api-design-patterns/
+2026-03-20 13:03:44,651 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/api-architecture/
+2026-03-20 13:03:44,829 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/api-security-py
+2026-03-20 13:03:45,221 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/advanced-node-and-express/
+2026-03-20 13:03:45,222 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/associate-cloud-developer
+2026-03-20 13:03:46,357 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/api-design-patterns/
+2026-03-20 13:03:46,361 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/api-architecture/
+2026-03-20 13:03:46,798 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/api-security-py
+2026-03-20 13:03:47,362 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/advanced-node-and-express/
+2026-03-20 13:03:48,039 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/associate-cloud-developer
+2026-03-20 13:12:55,964 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:12:56,708 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:12:58,160 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/cloud-native-application-developer
+2026-03-20 13:12:59,736 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.linuxfoundation.org/training/certified-associate-in-devops-adoe/
+2026-03-20 13:13:00,022 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:00,088 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/aws-certification-associate-developer-professional/
+2026-03-20 13:13:00,211 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/kubernetes-administration
+2026-03-20 13:13:00,213 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:00,274 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/cloud-computing-fundamentals
+2026-03-20 13:13:00,388 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learnDOCKER-AND-KUBERNETES-THE-COMPLETE-GUIDE/
+2026-03-20 13:13:00,439 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.pluralsight.com/courses/devops-fundamentals/
+2026-03-20 13:13:01,011 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/devsecops-the-top-5-essential-tools
+2026-03-20 13:13:02,006 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:13:02,039 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/cloud-native-application-developer
+2026-03-20 13:13:02,549 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-expert?redirectedBy=edgeRedirect
+2026-03-20 13:13:02,901 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:02,993 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/aws-certification-associate-developer-professional/
+2026-03-20 13:13:03,903 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learnDOCKER-AND-KUBERNETES-THE-COMPLETE-GUIDE/
+2026-03-20 13:13:04,081 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.linuxfoundation.org/training/certified-associate-in-devops-adoe/
+2026-03-20 13:13:04,401 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/cloud-computing-fundamentals
+2026-03-20 13:13:04,432 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/training/path/devops-engineer-professional/
+2026-03-20 13:13:04,453 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/kubernetes-administration
+2026-03-20 13:13:04,578 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.pluralsight.com/courses/devops-fundamentals/
+2026-03-20 13:13:05,151 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/devsecops-the-top-5-essential-tools
+2026-03-20 13:13:06,405 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/aws-certified-developer-associate/devops-with-jenkins-and-docker-on-ubuntu
+2026-03-20 13:13:06,433 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/cncf-cloud-native-systems
+2026-03-20 13:13:06,486 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/agile-scrum-fundamentals
+2026-03-20 13:13:06,585 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/devops-certification
+2026-03-20 13:13:06,798 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-devops-engineer-professional/
+2026-03-20 13:13:06,838 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:13:11,636 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-associate/
+2026-03-20 13:13:11,849 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/aws-certified-developer-associate/devops-with-jenkins-and-docker-on-ubuntu
+2026-03-20 13:13:12,135 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/cncf-cloud-native-systems
+2026-03-20 13:13:12,297 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/devops-certification
+2026-03-20 13:13:12,407 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/agile-scrum-fundamentals
+2026-03-20 13:13:12,665 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/aws-cloud-practitioner-essential-2021-updated/
+2026-03-20 13:13:12,784 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/exam/az-900/fundamentals
+2026-03-20 13:13:12,975 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-expert?redirectedBy=edgeRedirect
+2026-03-20 13:13:12,986 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/training/paths/azure-developer/
+2026-03-20 13:13:13,116 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/solutions-architect-associate/
+2026-03-20 13:13:13,487 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.udacity.com/course/aws-solutions-architect-associate--certified-by-aws-- ND9015Q
+2026-03-20 13:13:17,058 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer
+2026-03-20 13:13:17,439 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/exam/az-900/fundamentals
+2026-03-20 13:13:17,704 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.udacity.com/course/aws-solutions-architect-associate--certified-by-aws-- ND9015Q
+2026-03-20 13:13:18,283 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/aws-cloud-practitioner-essential-2021-updated/
+2026-03-20 13:13:18,681 [INFO] main: is_valid_url: VALID (HEAD 200) - https://docs.microsoft.com/en-us/learn/certifications/azure-developer
+2026-03-20 13:13:18,898 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/solutions-architect-associate/
+2026-03-20 13:13:19,218 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/training/paths/azure-developer/
+2026-03-20 13:13:19,862 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-devops-engineer-associate/
+2026-03-20 13:19:51,556 [INFO] main: Serving cached roadmap for role: Backend Developer
+2026-03-20 13:20:00,111 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:20:02,318 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/security-and-authentication-on-the-web/
+2026-03-20 13:20:02,330 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/modern-authentication-with-azure-active-directory/
+2026-03-20 13:20:02,411 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/authentication-authorization-in-net-core/
+2026-03-20 13:20:02,498 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certifications/security-identity-access-management
+2026-03-20 13:20:02,680 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://aws.amazon.com/certification/iam-architecture/
+2026-03-20 13:20:02,727 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/learn/oauth
+2026-03-20 13:20:02,908 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-security-administrator/
+2026-03-20 13:20:03,439 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/security-and-authentication-on-the-web/
+2026-03-20 13:20:03,484 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/modern-authentication-with-azure-active-directory/
+2026-03-20 13:20:03,562 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/authentication-authorization-in-net-core/
+2026-03-20 13:20:04,225 [INFO] main: is_valid_url: INVALID (GET 404) - https://aws.amazon.com/certification/iam-architecture/
+2026-03-20 13:20:04,319 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/learn/oauth
+2026-03-20 13:20:05,858 [INFO] main: is_valid_url: INVALID (GET 404) - https://docs.microsoft.com/en-us/learn/certifications/azure-security-administrator/
+2026-03-20 13:22:33,680 [INFO] main: Serving cached roadmap for role: Backend Developer
+2026-03-20 13:22:38,548 [INFO] main: Serving cached roadmap for skill: Authentication
+2026-03-20 13:24:45,443 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:24:46,659 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/flutter-and-python-full-stack-development/
+2026-03-20 13:24:47,025 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development?query=full+stack+with+react+mern
+2026-03-20 13:24:47,183 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.edx.org/course/full-stack-web-development-with-python-django-and-react
+2026-03-20 13:24:47,901 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/flutter-and-python-full-stack-development/
+2026-03-20 13:24:48,384 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.hackerrank.com/domains/full-stack
+2026-03-20 13:24:48,562 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development?query=full+stack+with+react+mern
+2026-03-20 13:24:48,796 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.edx.org/course/full-stack-web-development-with-python-django-and-react
+2026-03-20 13:24:49,008 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:24:50,680 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.hackerrank.com/domains/full-stack
+2026-03-20 13:24:51,560 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/the-complete-web-development-bootcamp/
+2026-03-20 13:24:51,868 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development
+2026-03-20 13:24:52,055 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/full-stack-development-with-python-and-django
+2026-03-20 13:24:53,165 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/the-complete-web-development-bootcamp/
+2026-03-20 13:24:53,358 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/web-development-bootcamp
+2026-03-20 13:24:53,631 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/full-stack-development-with-python-and-django
+2026-03-20 13:24:53,830 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development
+2026-03-20 13:24:54,921 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/web-development-bootcamp
+2026-03-20 13:25:01,655 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:02,929 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/front-end-development-with-html-css-and-javascript/
+2026-03-20 13:25:03,357 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:03,633 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/full-stack-development-with-mongodb
+2026-03-20 13:25:03,636 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.coursera.org/specializations/python
+2026-03-20 13:25:04,453 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certification/cloud-developer
+2026-03-20 13:25:04,844 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/front-end-development-with-html-css-and-javascript/
+2026-03-20 13:25:05,826 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/full-stack-development-with-flask/
+2026-03-20 13:25:06,406 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/learn/2026/build-a-cloud-application/
+2026-03-20 13:25:06,769 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/django-web-development/
+2026-03-20 13:25:06,896 [INFO] main: is_valid_url: VALID (HEAD 200) - https://cloud.google.com/certification/cloud-developer
+2026-03-20 13:25:06,958 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://learn.microsoft.com/en-us/training/certifications/azure-developer/
+2026-03-20 13:25:07,175 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.coursera.org/specializations/backend-development-with-nodejs
+2026-03-20 13:25:07,629 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/full-stack-development-with-mongodb
+2026-03-20 13:25:07,783 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://www.freecodecamp.org/courses/node-js-and-express-js/
+2026-03-20 13:25:07,910 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/full-stack-development-with-flask/
+2026-03-20 13:25:08,654 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.aws.training/Free/Account/Welcome/
+2026-03-20 13:25:09,140 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/learn/2026/build-a-cloud-application/
+2026-03-20 13:25:10,141 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/django-web-development/
+2026-03-20 13:25:10,206 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.aws.training/Free/Account/Welcome/
+2026-03-20 13:25:10,241 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.freecodecamp.org/courses/node-js-and-express-js/
+2026-03-20 13:25:10,396 [INFO] main: is_valid_url: INVALID (GET 404) - https://www.coursera.org/specializations/backend-development-with-nodejs
+2026-03-20 13:25:10,560 [INFO] main: is_valid_url: INVALID (GET 404) - https://learn.microsoft.com/en-us/training/certifications/azure-developer/
+2026-03-20 13:25:30,152 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:32,817 [INFO] httpx: HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-20 13:25:34,431 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/natural-language-processing-with-nltk-and-spacy/
+2026-03-20 13:25:34,435 [INFO] main: is_valid_url: INVALID (HEAD 403) - https://www.udemy.com/course/python-programming-mastering-the-basics/
+2026-03-20 13:25:34,497 [INFO] main: is_valid_url: VALID (HEAD 200) - https://aws.amazon.com/certification/certified-machine-learning-specialty/
+2026-03-20 13:25:34,774 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.coursera.org/specializations/machine-learning
+2026-03-20 13:25:34,779 [INFO] main: is_valid_url: VALID (HEAD 200) - https://www.edx.org/course/deep-learning-with-tensorflow
+2026-03-20 13:25:34,957 [INFO] main: is_valid_url: INVALID (HEAD 404) - https://cloud.google.com/certification/professional-machine-learning-engineer
+2026-03-20 13:25:35,581 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/natural-language-processing-with-nltk-and-spacy/
+2026-03-20 13:25:35,591 [INFO] main: is_valid_url: INVALID (GET 403) - https://www.udemy.com/course/python-programming-mastering-the-basics/
+2026-03-20 13:25:36,508 [INFO] main: is_valid_url: INVALID (GET 404) - https://cloud.google.com/certification/professional-machine-learning-engineer

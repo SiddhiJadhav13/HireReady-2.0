@@ -39,6 +39,10 @@ const NAV_ITEMS = [
 ];
 
 export default function App() {
+  // debug: log when App component mounts/renders
+  useEffect(() => {
+    console.log('App mounted');
+  }, []);
   /* ── Tab state ───────────────────────────────────────────────────── */
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
