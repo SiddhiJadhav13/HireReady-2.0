@@ -35,7 +35,7 @@ from openpyxl import Workbook
 from services.role_engine import rank_roles
 from services.feature_analyzer import build_complete_feature_vector, FEATURE_COLUMNS as DEFAULT_FEATURE_COLUMNS
 from services.database import engine, get_db, Base
-from services.models import User, AnalysisResult, QuizResult, Job, TpoLogin, InterestedJob, ShortlistedJob, Notification
+from services.models import User, AnalysisResult, QuizResult, Job, TpoLogin, InterestedJob, ShortlistedJob, Notification, JobResult
 from services.quiz_generator import generate_quiz_questions
 from services.auth import (
     hash_password,
@@ -138,6 +138,10 @@ def ensure_db_schema_compatibility() -> None:
         # Shortlisted mapping table metadata.
         conn.execute(text("ALTER TABLE shortlisted_jobs ADD COLUMN IF NOT EXISTS source VARCHAR(20) DEFAULT 'manual'"))
         conn.execute(text("UPDATE shortlisted_jobs SET source = 'manual' WHERE source IS NULL"))
+
+        # Job results table fields for auto-broadcasted round updates.
+        conn.execute(text("ALTER TABLE job_results ADD COLUMN IF NOT EXISTS result_status VARCHAR(20) DEFAULT 'Qualified'"))
+        conn.execute(text("ALTER TABLE job_results ADD COLUMN IF NOT EXISTS remarks TEXT DEFAULT ''"))
 
 
 ensure_db_schema_compatibility()
@@ -537,6 +541,8 @@ FRONTEND_ASSETS = FRONTEND_DIST / "assets"
 UPLOADS_DIR = BASE_DIR / "uploads"
 RESUMES_DIR = UPLOADS_DIR / "resumes"
 RESUMES_DIR.mkdir(parents=True, exist_ok=True)
+RESULTS_DIR = UPLOADS_DIR / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Allow CORS for the React dev server
 app.add_middleware(
@@ -563,6 +569,18 @@ if UPLOADS_DIR.exists():
 @app.get("/", response_class=HTMLResponse)
 async def serve_root(request: Request):
     """Serve the built HireReady frontend."""
+    index_path = FRONTEND_INDEX if FRONTEND_INDEX.exists() else BASE_DIR / "frontend" / "index.html"
+    if not index_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Frontend build not found. Run 'npm install' then 'npm run build' inside frontend/.",
+        )
+    return FileResponse(index_path)
+
+
+@app.get("/reset-password", response_class=HTMLResponse)
+async def serve_reset_password_page(request: Request):
+    """Serve frontend app for reset-password route (SPA entry)."""
     index_path = FRONTEND_INDEX if FRONTEND_INDEX.exists() else BASE_DIR / "frontend" / "index.html"
     if not index_path.exists():
         raise HTTPException(
@@ -711,6 +729,8 @@ def save_profile_photo(payload: ProfilePhotoRequest, current_user=Depends(get_cu
     db.commit()
 
     return {"ok": True, "photo_url": user.photo_url}
+
+RESULT_STATUSES = {"Selected", "Rejected", "Qualified"}
 
 
 @app.post("/api/auth/register")
@@ -882,14 +902,41 @@ def validate_password_strength(password: str) -> list:
     return errors
 
 
-def send_password_reset_email(recipient_email: str, token: str) -> None:
+def resolve_frontend_base_url(request: Optional[Request] = None) -> str:
+    """Return the best frontend base URL for reset links across environments."""
+    configured = (os.getenv("FRONTEND_BASE_URL", "") or "").strip().rstrip("/")
+    if configured:
+        return configured
+
+    if request is not None:
+        origin = (request.headers.get("origin") or "").strip().rstrip("/")
+        if origin.startswith("http://") or origin.startswith("https://"):
+            return origin
+
+        referer = (request.headers.get("referer") or "").strip()
+        if referer:
+            parsed = urlparse(referer)
+            if parsed.scheme in {"http", "https"} and parsed.netloc:
+                return f"{parsed.scheme}://{parsed.netloc}".rstrip("/")
+
+        forwarded_host = (request.headers.get("x-forwarded-host") or "").strip()
+        if forwarded_host:
+            forwarded_proto = (request.headers.get("x-forwarded-proto") or request.url.scheme or "http").strip()
+            return f"{forwarded_proto}://{forwarded_host}".rstrip("/")
+
+        return str(request.base_url).rstrip("/")
+
+    return "http://localhost:5173"
+
+
+def send_password_reset_email(recipient_email: str, token: str, request: Optional[Request] = None) -> bool:
     """Send a password reset link to the given email using SMTP."""
     smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
     smtp_port = int(os.getenv("SMTP_PORT", "587"))
     email_user = os.getenv("EMAIL_USER", "") or os.getenv("SMTP_USERNAME", "")
     email_pass = os.getenv("EMAIL_PASS", "") or os.getenv("SMTP_PASSWORD", "")
     email_from = os.getenv("EMAIL_FROM", "HireReady")
-    frontend_base_url = os.getenv("FRONTEND_BASE_URL", "http://localhost:5173").rstrip("/")
+    frontend_base_url = resolve_frontend_base_url(request)
 
     if not email_user or not email_pass:
         # SMTP not configured: don't treat this as an error for the
@@ -942,7 +989,7 @@ def send_password_reset_email(recipient_email: str, token: str) -> None:
 
 
 @app.post("/api/auth/forgot-password")
-def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
+def forgot_password(data: ForgotPasswordRequest, request: Request, db: Session = Depends(get_db)):
     """Generate reset token and email link, without revealing account existence."""
     email = data.email.strip().lower()
     generic_message = "If the email exists, a password reset link has been sent."
@@ -955,7 +1002,7 @@ def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
             user.password_reset_expires = expiry
             db.commit()
             try:
-                send_password_reset_email(email, token)
+                send_password_reset_email(email, token, request=request)
             except Exception:
                 # send_password_reset_email now returns False on failure,
                 # but keep defensive logging in case of unexpected errors.
@@ -968,7 +1015,7 @@ def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
             tpo.password_reset_expires = expiry
             db.commit()
             try:
-                send_password_reset_email(email, token)
+                send_password_reset_email(email, token, request=request)
             except Exception:
                 logger.exception("Failed to send password reset email (tpo) to %s", email)
             return {"message": generic_message}
@@ -2306,6 +2353,195 @@ def delete_job(
     return {"detail": "Job deleted"}
 
 
+@app.post("/api/results/upload")
+async def upload_job_results(
+    job_id: str = Form(...),
+    round_name: str = Form(...),
+    status_value: str = Form(..., alias="status"),
+    remarks: str = Form(""),
+    result_file: UploadFile = File(None),
+    tpo: User = Depends(get_current_tpo),
+    db: Session = Depends(get_db),
+):
+    """Upload round-wise results to all shortlisted + interested students for a TPO-owned job."""
+    normalized_round_name = (round_name or "").strip()
+    if not normalized_round_name:
+        raise HTTPException(status_code=400, detail="round_name is required")
+
+    normalized_status = (status_value or "").strip().title()
+    if normalized_status not in RESULT_STATUSES:
+        raise HTTPException(status_code=400, detail="status must be one of Selected, Rejected, or Qualified")
+
+    job = db.query(Job).filter(Job.id == job_id, Job.posted_by == tpo.id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    shortlisted_ids = {
+        str(row.student_id)
+        for row in db.query(ShortlistedJob.student_id).filter(ShortlistedJob.job_id == job_id).all()
+    }
+    interested_ids = {
+        str(row.student_id)
+        for row in db.query(InterestedJob.student_id).filter(InterestedJob.job_id == job_id).all()
+    }
+    valid_ids = sorted(shortlisted_ids.union(interested_ids))
+
+    if not valid_ids:
+        raise HTTPException(
+            status_code=400,
+            detail="No shortlisted or interested students found for this job",
+        )
+
+    normalized_remarks = (remarks or "").strip()
+    student_rows = [sid for sid in valid_ids]
+
+    file_url = ""
+    if result_file and result_file.filename:
+        ext = Path(result_file.filename).suffix.lower()
+        if ext not in {".pdf", ".xlsx", ".xls"}:
+            raise HTTPException(status_code=400, detail="Result file must be PDF or Excel (.xlsx/.xls)")
+
+        safe_round = re.sub(r"[^a-zA-Z0-9_-]+", "_", normalized_round_name).strip("_") or "round"
+        storage_name = f"{job_id}_{int(time.time())}_{safe_round}{ext}"
+        destination = RESULTS_DIR / storage_name
+        content = await result_file.read()
+        destination.write_bytes(content)
+        file_url = f"/uploads/results/{storage_name}"
+
+    result = JobResult(
+        job_id=job_id,
+        round_name=normalized_round_name,
+        result_status=normalized_status,
+        remarks=normalized_remarks,
+        students=student_rows,
+        file_url=file_url,
+    )
+    db.add(result)
+
+    for sid in valid_ids:
+        db.add(
+            Notification(
+                student_id=sid,
+                message=f"Result update for {job.company} - {job.title} ({normalized_round_name}): {normalized_status}.",
+            )
+        )
+
+    db.commit()
+    db.refresh(result)
+
+    return {
+        "message": "Results uploaded successfully",
+        "result": {
+            "id": str(result.id),
+            "job_id": str(result.job_id),
+            "round_name": result.round_name,
+            "status": result.result_status,
+            "remarks": result.remarks,
+            "students": result.students or [],
+            "file_url": result.file_url or "",
+            "created_at": str(result.created_at),
+        },
+    }
+
+
+@app.get("/api/results/{job_id}")
+def get_job_results(
+    job_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Get uploaded results for a job with role-based filtering."""
+    job = db.query(Job).filter(Job.id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    all_results = (
+        db.query(JobResult)
+        .filter(JobResult.job_id == job_id)
+        .order_by(JobResult.created_at.desc())
+        .all()
+    )
+
+    job_payload = {
+        "id": str(job.id),
+        "title": job.title,
+        "company": job.company,
+    }
+
+    if current_user.role == "tpo":
+        if str(job.posted_by) != str(current_user.id):
+            raise HTTPException(status_code=403, detail="You can only view results for your own jobs")
+
+        return {
+            "job": job_payload,
+            "results": [
+                {
+                    "id": str(item.id),
+                    "round_name": item.round_name,
+                    "status": item.result_status or "",
+                    "remarks": item.remarks or "",
+                    "students": item.students or [],
+                    "file_url": item.file_url or "",
+                    "created_at": str(item.created_at),
+                }
+                for item in all_results
+            ],
+        }
+
+    student_id = str(current_user.id)
+    is_interested = db.query(InterestedJob.id).filter(
+        InterestedJob.job_id == job_id,
+        InterestedJob.student_id == student_id,
+    ).first()
+    is_shortlisted = db.query(ShortlistedJob.id).filter(
+        ShortlistedJob.job_id == job_id,
+        ShortlistedJob.student_id == student_id,
+    ).first()
+
+    if not (is_interested or is_shortlisted):
+        return {"job": job_payload, "results": []}
+
+    filtered_results = []
+    for item in all_results:
+        entries = item.students or []
+        row_status = item.result_status or ""
+        row_remarks = item.remarks or ""
+
+        is_targeted = False
+        if entries and isinstance(entries[0], dict):
+            student_row = next(
+                (
+                    row
+                    for row in entries
+                    if str(row.get("studentId") or row.get("student_id") or "").strip() == student_id
+                ),
+                None,
+            )
+            if student_row:
+                is_targeted = True
+                row_status = student_row.get("status", row_status)
+                row_remarks = student_row.get("remarks", row_remarks)
+        else:
+            targeted_ids = {str(sid).strip() for sid in entries}
+            is_targeted = student_id in targeted_ids
+
+        if not is_targeted:
+            continue
+
+        filtered_results.append(
+            {
+                "id": str(item.id),
+                "round_name": item.round_name,
+                "status": row_status,
+                "remarks": row_remarks,
+                "file_url": item.file_url or "",
+                "created_at": str(item.created_at),
+            }
+        )
+
+    return {"job": job_payload, "results": filtered_results}
+
+
 @app.get("/api/tpo/jobs/{job_id}/shortlisted")
 def get_shortlisted_students(
     job_id: str,
@@ -2343,19 +2579,41 @@ def get_shortlisted_students(
     students = db.query(User).filter(User.role == "student").all()
 
     def normalize_resume_url_for_response(raw_url: Optional[str]) -> str:
-        """Return a stable resume URL for API consumers while preserving DB-backed value semantics."""
+        """Return a stable resume URL that works for both legacy and current stored values."""
         url = (raw_url or "").strip()
         if not url:
             return ""
 
-        # Keep local uploaded-file paths relative so frontend proxy/current host can serve them.
+        # Keep public external links untouched.
         if url.startswith("http://") or url.startswith("https://"):
             parsed = urlparse(url)
             if parsed.path.startswith("/uploads/") and parsed.hostname in {"localhost", "127.0.0.1"}:
                 return parsed.path
             return url
 
-        return url if url.startswith("/") else f"/{url}"
+        normalized = url.replace("\\", "/")
+        lower = normalized.lower()
+
+        # Legacy values may contain absolute filesystem paths. Extract app-relative uploads path.
+        uploads_marker = "/uploads/"
+        idx = lower.find(uploads_marker)
+        if idx != -1:
+            return normalized[idx:]
+
+        # Older records could store /resumes/... without the /uploads prefix.
+        resumes_marker = "/resumes/"
+        ridx = lower.find(resumes_marker)
+        if ridx != -1:
+            return f"/uploads{normalized[ridx:]}"
+
+        # Last fallback: if we can identify a filename, point to canonical resumes location.
+        filename = Path(normalized).name
+        if filename:
+            candidate = RESUMES_DIR / filename
+            if candidate.exists():
+                return f"/uploads/resumes/{filename}"
+
+        return normalized if normalized.startswith("/") else f"/{normalized}"
 
     def build_shortlist_item(s: User, source: str) -> dict:
         resume_sc = s.resume_score or 0
@@ -2867,6 +3125,51 @@ def get_my_interests(
         InterestedJob.student_id == current_user.id,
     ).all()
     return {"job_ids": [str(i.job_id) for i in interests]}
+
+
+@app.get("/api/jobs/my-applications")
+def get_my_applied_jobs(
+    current_user: User = Depends(get_current_student),
+    db: Session = Depends(get_db),
+):
+    """Return jobs where the student is interested or shortlisted."""
+    interested_ids = {
+        str(row.job_id)
+        for row in db.query(InterestedJob.job_id).filter(InterestedJob.student_id == current_user.id).all()
+    }
+    shortlisted_ids = {
+        str(row.job_id)
+        for row in db.query(ShortlistedJob.job_id).filter(ShortlistedJob.student_id == current_user.id).all()
+    }
+
+    all_job_ids = interested_ids.union(shortlisted_ids)
+    if not all_job_ids:
+        return {"jobs": []}
+
+    jobs = (
+        db.query(Job)
+        .filter(Job.id.in_(list(all_job_ids)))
+        .order_by(Job.created_at.desc())
+        .all()
+    )
+
+    return {
+        "jobs": [
+            {
+                "id": str(j.id),
+                "title": j.title,
+                "company": j.company,
+                "description": j.description,
+                "job_role": j.job_role or "",
+                "package_lpa": j.package_lpa,
+                "deadline": j.deadline,
+                "company_logo": j.company_logo or "",
+                "is_interested": str(j.id) in interested_ids,
+                "is_shortlisted": str(j.id) in shortlisted_ids,
+            }
+            for j in jobs
+        ]
+    }
 
 
 @app.get("/api/tpo/jobs/{job_id}/interested-students")

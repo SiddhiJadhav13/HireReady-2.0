@@ -18,6 +18,25 @@ export default function ResumeAnalysisPage({ token, user, result, onProfileUpdat
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
 
+  const normalizeResumeUrl = (rawUrl) => {
+    if (!rawUrl || !String(rawUrl).trim()) return '';
+    const url = String(rawUrl).trim();
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+
+    const normalized = url.replace(/\\/g, '/');
+    const lower = normalized.toLowerCase();
+    const uploadsIndex = lower.indexOf('/uploads/');
+    if (uploadsIndex !== -1) return `${window.location.origin}${normalized.slice(uploadsIndex)}`;
+
+    const resumesIndex = lower.indexOf('/resumes/');
+    if (resumesIndex !== -1) return `${window.location.origin}/uploads${normalized.slice(resumesIndex)}`;
+
+    return `${window.location.origin}${normalized.startsWith('/') ? normalized : `/${normalized}`}`;
+  };
+
+  const savedResumeName = user?.resume_filename || '';
+  const savedResumeUrl = normalizeResumeUrl(user?.resume_url || '');
+
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file && file.type === 'application/pdf') {
@@ -198,6 +217,42 @@ export default function ResumeAnalysisPage({ token, user, result, onProfileUpdat
                 >
                   Run Neural Analysis
                 </Button>
+                {(savedResumeName || savedResumeUrl) && (
+                  <Box w="full" bg="green.500/10" border="1px solid" borderColor="green.500/30" borderRadius="xl" p={3}>
+                    <Text fontSize="xs" color="green.200" fontWeight="700" mb={1}>
+                      Saved Resume
+                    </Text>
+                    <Text fontSize="xs" color="gray.200" mb={2} lineClamp={1}>
+                      {savedResumeName || 'Resume available'}
+                    </Text>
+                    {savedResumeUrl && (
+                      <HStack gap={2}>
+                        <Button
+                          size="xs"
+                          variant="outline"
+                          colorPalette="green"
+                          onClick={() => window.open(savedResumeUrl, '_blank', 'noopener,noreferrer')}
+                        >
+                          Open
+                        </Button>
+                        <Button
+                          size="xs"
+                          colorPalette="green"
+                          onClick={() => {
+                            const anchor = document.createElement('a');
+                            anchor.href = savedResumeUrl;
+                            anchor.download = savedResumeName || 'resume.pdf';
+                            document.body.appendChild(anchor);
+                            anchor.click();
+                            document.body.removeChild(anchor);
+                          }}
+                        >
+                          Download
+                        </Button>
+                      </HStack>
+                    )}
+                  </Box>
+                )}
                 {message && <Alert status={message.startsWith('Resume Analyzed!') ? 'success' : 'error'} title={message} variant="subtle" borderRadius="xl" />}
               </VStack>
             </Card.Body>
